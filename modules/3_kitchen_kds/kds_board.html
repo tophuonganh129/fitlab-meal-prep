@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Màn hình KDS Bếp - FitLab Meal Prep</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white p-6 font-sans">
+  <!-- Thanh trạng thái KDS -->
+  <div class="flex justify-between items-center border-b border-slate-700 pb-4 mb-6">
+    <div>
+      <a href="../../index.html" class="text-amber-400 text-sm hover:underline">← Quay lại Trang điều hướng tổng</a>
+      <h1 class="text-2xl font-bold mt-1">👨‍🍳 MÀN HÌNH ĐIỀU PHỐI CHẾ BIẾN BẾP (KDS) - MỤC 2.1.5</h1>
+    </div>
+    <div class="flex gap-3">
+      <span class="bg-green-700 px-3 py-1.5 rounded text-sm font-semibold">🟢 WebSocket Realtime: Đang kết nối</span>
+      <select class="bg-slate-800 border border-slate-600 px-3 py-1.5 rounded text-sm">
+        <option>Ca nhận: 17:30 - 18:00 (Hôm nay)</option>
+        <option>Ca nhận: 19:00 - 19:30 (Hôm nay)</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Chia 2 cột chuẩn nghiệp vụ 2.1.5 -->
+  <div class="grid grid-cols-12 gap-6">
+    <!-- CỘT TRÁI: BẢNG TỔNG HỢP MẺ NẤU (BATCH SUMMARY) -->
+    <div class="col-span-5 bg-slate-800 p-5 rounded-xl border border-slate-700">
+      <h2 class="text-lg font-bold text-amber-400 mb-2">1. BẢNG TỔNG HỢP MẺ NẤU THEO CA (HĐ 2 - HĐ 4)</h2>
+      <p class="text-xs text-slate-400 mb-4">Gom tổng nguyên liệu của các đơn trong ca để nấu mẻ lớn</p>
+      
+      <!-- TODO: [Thu Dịu] Gắn API lấy tổng định lượng mẻ nấu tại đây -->
+      <table class="w-full text-sm text-left mb-6">
+        <thead class="bg-slate-700 text-slate-300">
+          <tr>
+            <th class="p-2">Thành phần chế biến</th>
+            <th class="p-2">Tổng lượng thô</th>
+            <th class="p-2">Tổng lượng chín</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-700">
+          <tr><td class="p-2">Ức gà áp chảo thảo mộc</td><td class="p-2">3.200 g</td><td class="p-2 font-bold text-amber-300">2.560 g</td></tr>
+          <tr><td class="p-2">Cá hồi Nauy nướng</td><td class="p-2">1.500 g</td><td class="p-2 font-bold text-amber-300">1.275 g</td></tr>
+          <tr><td class="p-2">Cơm gạo lứt hữu cơ</td><td class="p-2">1.800 g</td><td class="p-2 font-bold text-amber-300">4.140 g</td></tr>
+        </tbody>
+      </table>
+
+      <!-- NÚT BẤM HĐ 4 -->
+      <button onclick="alert('TODO: Gọi API chuyển toàn bộ đơn trong ca sang ĐANG CHẾ BIẾN và khóa quyền hủy/dời ca ở quầy!')" 
+              class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-3 rounded-lg shadow">
+        🔥 BẮT ĐẦU CA NẤU [17:30] (Chuyển sang Đang chế biến)
+      </button>
+    </div>
+
+    <!-- CỘT PHẢI: HÀNG THẺ SUẤT ĂN CHI TIẾT (PLATING QUEUE) -->
+    <div class="col-span-7 bg-slate-800 p-5 rounded-xl border border-slate-700">
+      <h2 class="text-lg font-bold text-green-400 mb-2">2. HÀNG THẺ CÂN CHIA KHAY CÁ NHÂN (HĐ 5 - HĐ 8)</h2>
+      <p class="text-xs text-slate-400 mb-4">Đặt khay lên cân điện tử, gắp đúng số gram chín và kiểm tra nhãn dị ứng đỏ</p>
+
+      <!-- Thẻ đơn mẫu -->
+      <div class="bg-slate-900 p-4 rounded-lg border-l-4 border-red-500 mb-4">
+        <div class="flex justify-between items-start mb-2">
+          <div>
+            <span class="font-bold text-lg">#ORD-1024 - Hội viên: Nguyễn Văn A</span>
+            <span class="ml-2 bg-blue-900 text-blue-200 text-xs px-2 py-0.5 rounded">Mang đi (Hộp giữ nhiệt)</span>
+          </div>
+          <span class="bg-amber-500/20 text-amber-300 text-xs px-2 py-1 rounded">Đang chế biến</span>
+        </div>
+
+        <!-- Nhãn cảnh báo đỏ loại trừ dị ứng (HĐ 6) -->
+        <div class="bg-red-950 border border-red-600 text-red-200 px-3 py-2 rounded text-xs font-bold mb-3">
+          ⚠️ CẢNH BÁO DỊ ỨNG: DỊ ỨNG ĐẬU PHỘNG & HẢI SẢN CÓ VỎ (Tuyệt đối không dùng sốt lạc)
+        </div>
+
+        <!-- Định lượng gram thực tế cần gắp lên cân -->
+        <div class="grid grid-cols-3 gap-2 text-xs bg-slate-800 p-3 rounded mb-3">
+          <div>🍗 Ức gà chín: <b class="text-sm text-white">165g</b></div>
+          <div>🍚 Cơm gạo lứt: <b class="text-sm text-white">180g</b></div>
+          <div>🥦 Bông cải xanh: <b class="text-sm text-white">120g</b></div>
+        </div>
+
+        <!-- NÚT BẤM HĐ 7 -->
+        <button onclick="alert('TODO: Đổi trạng thái sang RA QUẦY, đẩy sang màn hình Lễ tân và bắn thông báo cho Hội viên!')"
+                class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-2.5 rounded-lg">
+          ✅ HOÀN TẤT ĐÓNG KHAY – RA QUẦY (1 Chạm)
+        </button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

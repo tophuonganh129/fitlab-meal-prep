@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>FitLab Meal Prep - Khung Hệ Thống & Phân Công</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-stone-100 p-8 font-sans">
+  <div class="max-w-6xl mx-auto">
+    <div class="bg-green-900 text-white p-6 rounded-xl shadow mb-8 flex justify-between items-center">
+      <div>
+        <h1 class="text-2xl font-bold">HỆ THỐNG FITLAB MEAL PREP - KHUNG GIAO DIỆN TỔNG (SKELETON)</h1>
+        <p class="text-green-200 text-sm mt-1">Bấm vào từng phân hệ bên dưới để mở khung màn hình và code logic nghiệp vụ tương ứng</p>
+      </div>
+      <a href="modules/1_auth/login.html" class="bg-white text-green-900 px-4 py-2 rounded-lg font-bold shadow hover:bg-green-50">
+        🔐 Màn hình Đăng nhập (Dịu & Lan)
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- 1. VAI TRÒ HỘI VIÊN -->
+      <div class="bg-white p-6 rounded-xl shadow border-t-4 border-green-600">
+        <h2 class="text-lg font-bold text-green-800 mb-3">1. WEB PORTAL - VAI TRÒ HỘI VIÊN</h2>
+        <ul class="space-y-3 text-sm">
+          <li class="flex justify-between items-center p-2 bg-stone-50 rounded">
+            <span>📊 Nhập chỉ số InBody & Dị ứng (R06-R09)</span>
+            <a href="modules/2_member_portal/inbody_allergy.html" class="text-blue-600 font-semibold hover:underline">[Linh & Dịu code] →</a>
+          </li>
+          <li class="flex justify-between items-center p-2 bg-stone-50 rounded">
+            <span>🥗 Thực đơn gợi ý & Hoán đổi món ±5% (R13-R17)</span>
+            <a href="modules/2_member_portal/menu_swap.html" class="text-blue-600 font-semibold hover:underline">[Linh & Dịu code] →</a>
+          </li>
+          <li class="flex justify-between items-center p-2 bg-stone-50 rounded">
+            <span>📅 Lịch đặt suất ăn trước 20h00 & Gói ăn (R18-R24)</span>
+            <a href="modules/2_member_portal/preorder_calendar.html" class="text-blue-600 font-semibold hover:underline">[Dịu & P.Anh code] →</a>
+          </li>
+          <li class="flex justify-between items-center p-2 bg-stone-50 rounded">
+            <span>📱 Theo dõi tiến độ nấu & Mã QR nhận đồ</span>
+            <a href="modules/2_member_portal/order_qr_status.html" class="text-blue-600 font-semibold hover:underline">[P.Anh & Lan code] →</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 2. VAI TRÒ BẾP (KDS) -->
+      <div class="bg-white p-6 rounded-xl shadow border-t-4 border-amber-500">
+        <h2 class="text-lg font-bold text-amber-700 mb-3">2. MÀN HÌNH KDS - VAI TRÒ BỘ PHẬN BẾP</h2>
+        <p class="text-xs text-gray-500 mb-3">Màn hình cảm ứng ngang tại bếp: Gom mẻ theo ca & Cân chia gram thực tế</p>
+        <div class="p-4 bg-amber-50 rounded-lg border border-amber-200 mb-3">
+          <div class="font-semibold text-sm text-amber-900 mb-2">Các nút chức năng đã dựng sẵn trong khung:</div>
+          <div class="text-xs text-gray-700 space-y-1">
+            <div>• Nút <b>[Bắt đầu ca nấu]</b> (Khóa sửa/hủy, chuyển sang Đang chế biến)</div>
+            <div>• Nhãn đỏ <b>[CẢNH BÁO DỊ ỨNG]</b> & Bảng định lượng gram chín</div>
+            <div>• Nút 1 chạm <b>[Hoàn tất - Ra quầy]</b> & Chuông WebSocket</div>
+          </div>
+        </div>
+        <a href="modules/3_kitchen_kds/kds_board.html" class="block text-center bg-amber-600 text-white py-2 rounded-lg font-bold hover:bg-amber-700">
+          👨‍🍳 Mở Khung Màn Hình Bếp KDS [Dịu & P.Anh code] →
+        </a>
+      </div>
+
+      <!-- 3. VAI TRÒ QUẦY LỄ TÂN -->
+      <div class="bg-white p-6 rounded-xl shadow border-t-4 border-blue-600">
+        <h2 class="text-lg font-bold text-blue-800 mb-3">3. QUẦY FITLAB LOUNGE - LỄ TÂN GIAO NHẬN</h2>
+        <ul class="space-y-3 text-sm">
+          <li class="flex justify-between items-center p-2 bg-stone-50 rounded">
+            <span>🔍 Quét mã thẻ trả đồ, Xử lý No-show & Dời ca</span>
+            <a href="modules/4_counter_lounge/handover_scan.html" class="text-blue-600 font-semibold hover:underline">[Dịu & P.Anh code] →</a>
+          </li>
+          <li class="flex justify-between items-center p-2 bg-stone-50 rounded">
+            <span>💳 Bán gói suất ăn & Liên kết thẻ tập tại chỗ</span>
+            <a href="modules/4_counter_lounge/package_topup.html" class="text-blue-600 font-semibold hover:underline">[Dịu & Linh code] →</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 4. VAI TRÒ QUẢN TRỊ VIÊN & BẾP TRƯỞNG -->
+      <div class="bg-white p-6 rounded-xl shadow border-t-4 border-purple-600">
+        <h2 class="text-lg font-bold text-purple-800 mb-3">4. WEB ADMIN - QUẢN TRỊ VIÊN & BẾP TRƯỞNG</h2>
+        <ul class="space-y-3 text-sm">
+          <li class="flex justify-between items-center p-2 bg-stone-50 rounded">
+            <span>🍲 Quản lý món, Định lượng & Gạt nút "Tạm hết món"</span>
+            <a href="modules/5_admin_system/dish_recipe.html" class="text-blue-600 font-semibold hover:underline">[Linh & P.Anh code] →</a>
+          </li>
+          <li class="flex justify-between items-center p-2 bg-stone-50 rounded">
+            <span>⚙️ Cấu hình công thức BMR, TDEE, hệ số PAL</span>
+            <a href="modules/5_admin_system/macro_config.html" class="text-blue-600 font-semibold hover:underline">[Dịu code] →</a>
+          </li>
+          <li class="flex justify-between items-center p-2 bg-stone-50 rounded">
+            <span>📈 Báo cáo tiêu hao, Doanh thu & Khóa kỳ đối soát</span>
+            <a href="modules/5_admin_system/reports_lock.html" class="text-blue-600 font-semibold hover:underline">[Linh & P.Anh code] →</a>
+          </li>
+          <li class="flex justify-between items-center p-2 bg-stone-50 rounded">
+            <span>🛡️ Quản lý TK (Read-only InBody), RBAC & Audit Log</span>
+            <a href="modules/5_admin_system/user_rbac_audit.html" class="text-blue-600 font-semibold hover:underline">[Linh & Lan code] →</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
