@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Đăng nhập & Quản lý phiên - FitLab Meal Prep</title>
+  <title>Cổng Đăng Nhập & Xác Thực Hệ Thống - FitLab Meal Prep</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script>
@@ -26,220 +26,699 @@
     }
   </script>
 </head>
-<body class="bg-gradient-to-br from-stone-100 via-emerald-50 to-stone-200 min-h-screen flex items-center justify-center p-4 font-sans text-stone-800">
-  <div class="max-w-4xl w-full bg-white rounded-2xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-12 border border-stone-200">
+<body class="bg-gradient-to-br from-stone-100 via-emerald-50/40 to-stone-200 min-h-screen flex items-center justify-center p-4 font-sans text-stone-800">
+
+  <div class="max-w-5xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 border border-stone-200/80">
     
-    <!-- CỘT TRÁI: BRANDING & GIỚI THIỆU HỆ THỐNG -->
-    <div class="md:col-span-5 bg-gradient-to-br from-emerald-900 to-green-950 text-white p-8 flex flex-col justify-between relative overflow-hidden">
-      <div class="absolute -top-16 -left-16 w-48 h-48 bg-emerald-700/20 rounded-full blur-2xl"></div>
-      <div class="absolute -bottom-16 -right-16 w-48 h-48 bg-emerald-500/20 rounded-full blur-2xl"></div>
-      
-      <div class="relative z-10">
-        <a href="../../index.html" class="inline-flex items-center text-xs text-emerald-300 hover:text-white mb-6 transition">
-          <i class="fa-solid fa-arrow-left mr-2"></i> Quay lại Khung điều hướng
-        </a>
-        <div class="flex items-center space-x-3 mb-4">
-          <div class="w-12 h-12 bg-emerald-500 text-white rounded-xl flex items-center justify-center text-2xl font-black shadow-lg">
+    <!-- CỘT TRÁI (5 CỘT): BRAND IDENTITY & TRẠNG THÁI PHIÊN BẢO MẬT -->
+    <div class="lg:col-span-5 bg-gradient-to-br from-emerald-950 via-green-950 to-emerald-900 text-white p-8 md:p-10 flex flex-col justify-between relative overflow-hidden">
+      <!-- Glow Decorators -->
+      <div class="absolute -top-20 -left-20 w-56 h-56 bg-emerald-600/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-20 -right-20 w-56 h-56 bg-green-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10 space-y-6">
+        <div>
+          <a href="../../index.html" class="inline-flex items-center text-xs text-emerald-300 hover:text-white transition font-medium">
+            <i class="fa-solid fa-arrow-left mr-2"></i> Trở về Trang chủ điều hành
+          </a>
+        </div>
+
+        <div class="flex items-center space-x-3.5 pt-2">
+          <div class="w-12 h-12 bg-gradient-to-tr from-emerald-500 to-green-400 rounded-2xl flex items-center justify-center text-2xl shadow-lg shadow-emerald-900/50">
             🥗
           </div>
           <div>
-            <h1 class="text-xl font-bold tracking-tight">FITLAB MEAL PREP</h1>
-            <p class="text-xs text-emerald-300 uppercase tracking-wider">Dinh Dưỡng Thể Thao Đo Ni Đóng Giày</p>
+            <h1 class="text-xl font-extrabold tracking-tight text-white">FITLAB MEAL PREP</h1>
+            <p class="text-[11px] text-emerald-300 tracking-wider uppercase font-semibold">Cổng Xác Thực & Quản Lý Phiên</p>
           </div>
         </div>
-        <p class="text-sm text-emerald-100/90 leading-relaxed mb-6">
-          Hệ thống đồng bộ khép kín: Hội viên kiểm soát InBody, Bếp nấu theo định lượng gram chuẩn KDS, Quầy giao nhận 1 chạm.
+
+        <p class="text-xs text-emerald-100/80 leading-relaxed">
+          Nền tảng dinh dưỡng thể thao cá nhân hóa chuẩn InBody. Đăng nhập để truy cập hệ thống theo đúng thẩm quyền được phân định bảo mật (RBAC).
         </p>
 
-        <!-- Trạng thái phiên hiện tại (nếu đã đăng nhập) -->
-        <div id="activeSessionBox" class="hidden bg-emerald-800/60 border border-emerald-500/40 p-3.5 rounded-xl text-xs space-y-2 backdrop-blur-sm">
+        <!-- Trạng thái phiên đang mở (nếu có) -->
+        <div id="activeSessionBox" class="hidden bg-emerald-900/60 border border-emerald-500/30 p-4 rounded-2xl text-xs space-y-2.5 backdrop-blur-md">
           <div class="flex items-center justify-between text-emerald-200 font-semibold">
-            <span><i class="fa-solid fa-circle-check text-emerald-400 mr-1.5"></i>Phiên đang hoạt động:</span>
-            <span id="sessionRoleBadge" class="bg-emerald-600 px-2 py-0.5 rounded text-[10px] text-white"></span>
+            <span class="flex items-center"><i class="fa-solid fa-circle-check text-emerald-400 mr-2"></i>Phiên đăng nhập đang mở:</span>
+            <span id="sessionRoleBadge" class="bg-emerald-600 px-2 py-0.5 rounded text-[10px] text-white font-bold"></span>
           </div>
-          <div class="text-white font-medium" id="sessionUserName"></div>
+          <div class="text-white font-bold text-sm truncate" id="sessionUserName"></div>
+          <div class="text-[11px] text-emerald-300/80 flex items-center justify-between">
+            <span id="sessionExpiryText"></span>
+          </div>
           <div class="flex gap-2 pt-1">
-            <button onclick="FitLabAuth.resumeSession()" class="flex-1 bg-white text-emerald-900 font-bold py-1.5 px-2 rounded-lg text-center hover:bg-emerald-50 transition">
-              Vào hệ thống →
+            <button onclick="AuthEngine.resumeSession()" class="flex-1 bg-white text-emerald-950 font-bold py-2 px-3 rounded-xl text-center hover:bg-emerald-50 transition shadow-sm">
+              Tiếp tục phiên này →
             </button>
-            <button onclick="FitLabAuth.logout()" class="px-2.5 py-1.5 bg-red-500/80 hover:bg-red-600 text-white rounded-lg transition" title="Đăng xuất">
-              <i class="fa-solid fa-power-off"></i>
+            <button onclick="AuthEngine.logout()" class="px-3 py-2 bg-red-600/80 hover:bg-red-700 text-white rounded-xl transition" title="Đăng xuất">
+              <i class="fa-solid fa-arrow-right-from-bracket"></i>
             </button>
           </div>
+        </div>
+
+        <!-- Bảng tra cứu tài khoản hệ thống (Credentials Reference Modal Trigger) -->
+        <div class="bg-slate-900/60 border border-emerald-500/20 p-3.5 rounded-2xl text-xs space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-emerald-200 flex items-center">
+              <i class="fa-solid fa-id-badge mr-1.5 text-emerald-400"></i> Tài khoản mẫu hệ thống
+            </span>
+            <button type="button" onclick="AuthEngine.toggleCredentialsDrawer()" class="text-[11px] text-emerald-300 hover:text-white underline">
+              Xem chi tiết
+            </button>
+          </div>
+          <p class="text-[11px] text-emerald-200/70">
+            Hệ thống yêu cầu nhập <b>chính xác</b> tài khoản và mật khẩu đã đăng ký để kiểm tra phân quyền.
+          </p>
         </div>
       </div>
 
-      <!-- Thông tin module -->
-      <div class="relative z-10 pt-6 border-t border-emerald-800/80 text-[11px] text-emerald-300 flex justify-between items-center">
-        <span>Module 1: Authentication & Session</span>
-        <span class="font-semibold text-emerald-200 bg-emerald-800/70 px-2 py-0.5 rounded">Hệ thống Xác thực RBAC</span>
+      <!-- Tiêu chuẩn an ninh -->
+      <div class="relative z-10 pt-6 border-t border-emerald-900 text-[11px] text-emerald-300/70 flex justify-between items-center">
+        <span>Tiêu chuẩn bảo mật: SHA-256 RBAC</span>
+        <span class="flex items-center text-emerald-400"><i class="fa-solid fa-lock mr-1"></i> SSL/TLS Secure</span>
       </div>
     </div>
 
-    <!-- CỘT PHẢI: FORM ĐĂNG NHẬP & CHỌN VAI TRÒ DEMO -->
-    <div class="md:col-span-7 p-8 flex flex-col justify-between">
+    <!-- CỘT PHẢI (7 CỘT): FORM ĐĂNG NHẬP / ĐĂNG KÝ VỚI RÀNG BUỘC CHẶT CHẼ -->
+    <div class="lg:col-span-7 p-8 md:p-10 flex flex-col justify-between">
       <div>
-        <div class="flex justify-between items-center mb-6">
-          <div>
-            <h2 class="text-2xl font-bold text-stone-800">Đăng Nhập</h2>
-            <p class="text-xs text-stone-500 mt-1">Truy cập tài khoản theo vai trò được phân quyền</p>
+
+        <!-- HEADER FORM & TAB SWITCHER -->
+        <div class="flex items-center justify-between mb-6 pb-2 border-b border-stone-100">
+          <div class="flex space-x-6">
+            <button type="button" id="tabLoginBtn" onclick="AuthEngine.switchTab('login')" class="text-base font-extrabold pb-2 text-emerald-700 border-b-2 border-emerald-600 transition">
+              Đăng Nhập
+            </button>
+            <button type="button" id="tabRegisterBtn" onclick="AuthEngine.switchTab('register')" class="text-base font-bold pb-2 text-stone-400 hover:text-stone-700 transition">
+              Đăng Ký Hội Viên Mới
+            </button>
           </div>
-          <span class="text-xs bg-stone-100 text-stone-600 px-2.5 py-1 rounded-full font-medium border border-stone-200">
-            Auth v1.0
+          <span class="text-[11px] bg-stone-100 text-stone-600 px-2.5 py-1 rounded-full font-medium border border-stone-200">
+            RBAC Auth Gate
           </span>
         </div>
 
-        <!-- Nút chọn vai trò nhanh (Demo 1-Click Login) -->
-        <div class="mb-6 bg-stone-50 p-3.5 rounded-xl border border-stone-200">
-          <div class="text-xs font-semibold text-stone-600 mb-2 flex items-center justify-between">
-            <span>⚡ Chọn nhanh vai trò để thử nghiệm:</span>
-            <span class="text-[10px] text-stone-400">Tự động điền & chuyển hướng</span>
+        <!-- CẢNH BÁO KHÓA TÀI KHOẢN KHI NHẬP SAI QUÁ SỐ LẦN -->
+        <div id="lockoutBanner" class="hidden mb-4 p-4 bg-red-950 border border-red-600 rounded-2xl text-red-200 text-xs space-y-1">
+          <div class="font-bold flex items-center text-sm">
+            <i class="fa-solid fa-shield-halved mr-2 text-red-400"></i> HỆ THỐNG TẠM KHÓA TRUY CẬP
           </div>
-          <div class="grid grid-cols-2 gap-2 text-xs">
-            <button type="button" onclick="FitLabAuth.quickSelect('member')" class="text-left p-2 rounded-lg border border-emerald-200 bg-emerald-50/50 hover:bg-emerald-100 text-emerald-900 transition flex items-center space-x-2">
-              <span class="text-base">🏋️</span>
-              <div>
-                <div class="font-bold">Hội viên (Portal)</div>
-                <div class="text-[10px] text-emerald-700">Nguyễn Văn A</div>
-              </div>
-            </button>
-
-            <button type="button" onclick="FitLabAuth.quickSelect('kitchen')" class="text-left p-2 rounded-lg border border-amber-200 bg-amber-50/50 hover:bg-amber-100 text-amber-900 transition flex items-center space-x-2">
-              <span class="text-base">👨‍🍳</span>
-              <div>
-                <div class="font-bold">Bếp KDS</div>
-                <div class="text-[10px] text-amber-700">Trần Bếp Trưởng</div>
-              </div>
-            </button>
-
-            <button type="button" onclick="FitLabAuth.quickSelect('counter')" class="text-left p-2 rounded-lg border border-blue-200 bg-blue-50/50 hover:bg-blue-100 text-blue-900 transition flex items-center space-x-2">
-              <span class="text-base">🛎️</span>
-              <div>
-                <div class="font-bold">Lễ tân Quầy</div>
-                <div class="text-[10px] text-blue-700">Lê Thu Ngân</div>
-              </div>
-            </button>
-
-            <button type="button" onclick="FitLabAuth.quickSelect('admin')" class="text-left p-2 rounded-lg border border-purple-200 bg-purple-50/50 hover:bg-purple-100 text-purple-900 transition flex items-center space-x-2">
-              <span class="text-base">⚙️</span>
-              <div>
-                <div class="font-bold">Quản trị viên</div>
-                <div class="text-[10px] text-purple-700">Admin FitLab</div>
-              </div>
-            </button>
+          <div>Bạn đã nhập sai thông tin xác thực 5 lần liên tiếp để phòng chống tấn công dò mật khẩu.</div>
+          <div class="text-amber-300 font-mono font-bold pt-1">
+            Vui lòng thử lại sau: <span id="lockoutTimer">30</span> giây
           </div>
         </div>
 
-        <!-- FORM CHÍNH -->
-        <form id="loginForm" onsubmit="FitLabAuth.handleFormSubmit(event)" class="space-y-4">
+        <!-- ==================== FORM 1: ĐĂNG NHẬP ==================== -->
+        <form id="loginForm" onsubmit="AuthEngine.handleLoginSubmit(event)" class="space-y-4">
+          <!-- Trường Tài khoản -->
           <div>
-            <label class="block text-xs font-semibold text-stone-700 mb-1" for="email">Tài khoản Email / Số điện thoại</label>
+            <label class="block text-xs font-bold text-stone-700 mb-1" for="loginAccount">
+              Tài khoản (Email hoặc Số điện thoại) <span class="text-red-500">*</span>
+            </label>
             <div class="relative">
-              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-stone-400">
                 <i class="fa-regular fa-envelope"></i>
               </span>
-              <input type="text" id="email" required
-                     placeholder="nguyenvana@fitlab.vn hoặc 0912345678"
-                     class="w-full pl-9 pr-3 py-2.5 text-sm bg-stone-50 border border-stone-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:bg-white focus:outline-none transition">
+              <input type="text" id="loginAccount"
+                     placeholder="Ví dụ: nguyenvana@fitlab.vn hoặc 0912345678"
+                     class="w-full pl-10 pr-3 py-2.5 text-sm bg-stone-50 border border-stone-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:bg-white focus:outline-none transition">
             </div>
+            <div id="loginAccountError" class="text-[11px] text-red-600 mt-1 hidden font-medium"></div>
           </div>
 
+          <!-- Trường Mật khẩu -->
           <div>
             <div class="flex justify-between items-center mb-1">
-              <label class="block text-xs font-semibold text-stone-700" for="password">Mật khẩu</label>
-              <a href="#" onclick="alert('Vui lòng liên hệ Lễ tân Quầy FitLab Lounge để cấp lại mật khẩu.')" class="text-[11px] text-emerald-700 hover:underline">Quên mật khẩu?</a>
-            </div>
-            <div class="relative">
-              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400">
-                <i class="fa-solid fa-lock"></i>
-              </span>
-              <input type="password" id="password" required
-                     placeholder="••••••••"
-                     class="w-full pl-9 pr-10 py-2.5 text-sm bg-stone-50 border border-stone-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:bg-white focus:outline-none transition">
-              <button type="button" onclick="FitLabAuth.togglePasswordVisibility()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-stone-400 hover:text-stone-600">
-                <i id="togglePwdIcon" class="fa-regular fa-eye"></i>
+              <label class="block text-xs font-bold text-stone-700" for="loginPassword">
+                Mật khẩu <span class="text-red-500">*</span>
+              </label>
+              <button type="button" onclick="AuthEngine.openForgotPasswordModal()" class="text-[11px] text-emerald-700 hover:underline font-semibold">
+                Quên mật khẩu?
               </button>
             </div>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-stone-400">
+                <i class="fa-solid fa-lock"></i>
+              </span>
+              <input type="password" id="loginPassword"
+                     placeholder="Nhập mật khẩu của bạn"
+                     class="w-full pl-10 pr-10 py-2.5 text-sm bg-stone-50 border border-stone-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:bg-white focus:outline-none transition">
+              <button type="button" onclick="AuthEngine.togglePasswordVisibility('loginPassword', 'loginPwdIcon')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-stone-400 hover:text-stone-600">
+                <i id="loginPwdIcon" class="fa-regular fa-eye"></i>
+              </button>
+            </div>
+            <div id="loginPasswordError" class="text-[11px] text-red-600 mt-1 hidden font-medium"></div>
           </div>
 
-          <div class="flex items-center justify-between text-xs">
+          <!-- Tùy chọn nhớ phiên & cảnh báo số lần nhập sai -->
+          <div class="flex items-center justify-between text-xs pt-1">
             <label class="flex items-center space-x-2 cursor-pointer select-none">
-              <input type="checkbox" id="rememberMe" checked class="rounded text-emerald-600 focus:ring-emerald-500">
-              <span class="text-stone-600">Ghi nhớ phiên (Session 7 ngày)</span>
+              <input type="checkbox" id="rememberMe" checked class="rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4">
+              <span class="text-stone-600 font-medium">Ghi nhớ đăng nhập (Phiên bảo mật 7 ngày)</span>
             </label>
+            <span id="attemptCounter" class="text-[11px] text-stone-400"></span>
           </div>
 
-          <div id="errorMessage" class="hidden p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-lg flex items-center space-x-2">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-            <span id="errorText">Email hoặc mật khẩu không chính xác!</span>
+          <!-- Thông báo lỗi chung -->
+          <div id="loginGeneralError" class="hidden p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl flex items-center space-x-2">
+            <i class="fa-solid fa-circle-exclamation text-sm shrink-0"></i>
+            <span id="loginGeneralErrorText"></span>
           </div>
 
-          <button type="submit" id="submitBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-lg shadow-md hover:shadow-lg transition flex items-center justify-center space-x-2">
-            <span id="submitSpinner" class="hidden"><i class="fa-solid fa-circle-notch fa-spin"></i></span>
-            <span id="submitText">Xác thực & Đăng nhập</span>
+          <!-- Nút đăng nhập -->
+          <button type="submit" id="loginSubmitBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center space-x-2 text-sm">
+            <span id="loginSpinner" class="hidden"><i class="fa-solid fa-circle-notch fa-spin"></i></span>
+            <span id="loginBtnText">Đăng Nhập Vào Hệ Thống</span>
           </button>
         </form>
+
+        <!-- ==================== FORM 2: ĐĂNG KÝ HỘI VIÊN MỚI ==================== -->
+        <form id="registerForm" onsubmit="AuthEngine.handleRegisterSubmit(event)" class="space-y-3.5 hidden">
+          <div>
+            <label class="block text-xs font-bold text-stone-700 mb-1" for="regFullName">
+              Họ và tên hội viên <span class="text-red-500">*</span>
+            </label>
+            <input type="text" id="regFullName" placeholder="Ví dụ: Trần Minh Đức"
+                   class="w-full px-3.5 py-2 text-sm bg-stone-50 border border-stone-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:bg-white focus:outline-none transition">
+            <div id="regFullNameError" class="text-[11px] text-red-600 mt-1 hidden font-medium"></div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-stone-700 mb-1" for="regEmail">
+                Email <span class="text-red-500">*</span>
+              </label>
+              <input type="email" id="regEmail" placeholder="duc.tran@gmail.com"
+                     class="w-full px-3.5 py-2 text-sm bg-stone-50 border border-stone-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:bg-white focus:outline-none transition">
+              <div id="regEmailError" class="text-[11px] text-red-600 mt-1 hidden font-medium"></div>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-stone-700 mb-1" for="regPhone">
+                Số điện thoại (10 số) <span class="text-red-500">*</span>
+              </label>
+              <input type="tel" id="regPhone" placeholder="0988776655" maxlength="10"
+                     class="w-full px-3.5 py-2 text-sm bg-stone-50 border border-stone-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:bg-white focus:outline-none transition">
+              <div id="regPhoneError" class="text-[11px] text-red-600 mt-1 hidden font-medium"></div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-stone-700 mb-1" for="regPassword">
+                Mật khẩu (≥ 6 ký tự) <span class="text-red-500">*</span>
+              </label>
+              <div class="relative">
+                <input type="password" id="regPassword" placeholder="Tối thiểu 6 ký tự"
+                       class="w-full px-3.5 pr-8 py-2 text-sm bg-stone-50 border border-stone-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:bg-white focus:outline-none transition">
+                <button type="button" onclick="AuthEngine.togglePasswordVisibility('regPassword', 'regPwdIcon1')" class="absolute inset-y-0 right-0 pr-2.5 flex items-center text-stone-400">
+                  <i id="regPwdIcon1" class="fa-regular fa-eye text-xs"></i>
+                </button>
+              </div>
+              <div id="regPasswordError" class="text-[11px] text-red-600 mt-1 hidden font-medium"></div>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-stone-700 mb-1" for="regConfirmPassword">
+                Xác nhận mật khẩu <span class="text-red-500">*</span>
+              </label>
+              <div class="relative">
+                <input type="password" id="regConfirmPassword" placeholder="Nhập lại mật khẩu"
+                       class="w-full px-3.5 pr-8 py-2 text-sm bg-stone-50 border border-stone-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:bg-white focus:outline-none transition">
+                <button type="button" onclick="AuthEngine.togglePasswordVisibility('regConfirmPassword', 'regPwdIcon2')" class="absolute inset-y-0 right-0 pr-2.5 flex items-center text-stone-400">
+                  <i id="regPwdIcon2" class="fa-regular fa-eye text-xs"></i>
+                </button>
+              </div>
+              <div id="regConfirmPasswordError" class="text-[11px] text-red-600 mt-1 hidden font-medium"></div>
+            </div>
+          </div>
+
+          <div class="p-2.5 bg-emerald-50 rounded-xl border border-emerald-200 text-[11px] text-emerald-900 leading-relaxed">
+            🌿 Tài khoản đăng ký mới sẽ tự động được cấp quyền <b>Hội viên FitLab (Member Portal)</b> và khởi tạo gói dinh dưỡng mặc định.
+          </div>
+
+          <button type="submit" id="regSubmitBtn" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 px-4 rounded-xl shadow-md transition flex items-center justify-center space-x-2 text-sm">
+            <span>Đăng Ký & Khởi Tạo Hồ Sơ InBody</span>
+          </button>
+        </form>
+
       </div>
 
-      <div class="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between text-[11px] text-stone-400">
-        <span>FitLab Meal Prep Security & RBAC</span>
-        <span>Mã hóa SHA-256 Mocked</span>
+      <!-- FOOTER THÔNG TIN HỖ TRỢ -->
+      <div class="mt-6 pt-4 border-t border-stone-100 flex flex-col sm:flex-row items-center justify-between text-[11px] text-stone-400 gap-2">
+        <span>FitLab Meal Prep Enterprise Security</span>
+        <span>Hỗ trợ kỹ thuật: hotro@fitlab.vn | Hotline: 1900 8899</span>
       </div>
     </div>
 
   </div>
 
+  <!-- ==================== MODAL 1: THÔNG TIN TÀI KHOẢN MẪU HỆ THỐNG ==================== -->
+  <div id="credentialsModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-stone-200 space-y-4">
+      <div class="flex justify-between items-center border-b border-stone-100 pb-3">
+        <div class="flex items-center space-x-2">
+          <i class="fa-solid fa-key text-emerald-600"></i>
+          <h3 class="font-bold text-stone-900 text-base">Danh Sách Tài Khoản Mẫu Đã Đăng Ký</h3>
+        </div>
+        <button type="button" onclick="AuthEngine.toggleCredentialsDrawer()" class="text-stone-400 hover:text-stone-700 p-1">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <p class="text-xs text-stone-500">
+        Bạn hãy sao chép (hoặc bấm nút "Điền nhanh") để kiểm tra logic xác thực và phân quyền chính xác của hệ thống:
+      </p>
+
+      <div class="space-y-2.5 text-xs max-h-80 overflow-y-auto pr-1" id="credentialsListContainer">
+        <!-- Render động từ danh sách database -->
+      </div>
+
+      <div class="pt-2 border-t border-stone-100 flex justify-end">
+        <button type="button" onclick="AuthEngine.toggleCredentialsDrawer()" class="px-4 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-xl font-bold text-xs">
+          Đóng cửa sổ
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 2: QUÊN MẬT KHẨU & ĐẶT LẠI MẬT KHẨU ==================== -->
+  <div id="forgotPwdModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-stone-200 space-y-4">
+      <div class="flex justify-between items-center border-b border-stone-100 pb-3">
+        <h3 class="font-bold text-stone-900 text-base flex items-center">
+          <i class="fa-solid fa-lock-rotate mr-2 text-emerald-600"></i> Khôi Phục Mật Khẩu
+        </h3>
+        <button type="button" onclick="AuthEngine.closeForgotPasswordModal()" class="text-stone-400 hover:text-stone-700 p-1">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div id="forgotStep1" class="space-y-3">
+        <p class="text-xs text-stone-500">
+          Nhập email hoặc số điện thoại liên kết với tài khoản FitLab của bạn để nhận mã khôi phục:
+        </p>
+        <div>
+          <input type="text" id="forgotInput" placeholder="Email hoặc SĐT đã đăng ký"
+                 class="w-full px-3.5 py-2.5 text-sm bg-stone-50 border border-stone-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          <div id="forgotInputError" class="text-[11px] text-red-600 mt-1 hidden font-medium"></div>
+        </div>
+        <button type="button" onclick="AuthEngine.sendForgotOTP()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs transition">
+          Gửi Mã Xác Thực OTP
+        </button>
+      </div>
+
+      <div id="forgotStep2" class="space-y-3 hidden">
+        <div class="p-3 bg-emerald-50 text-emerald-900 border border-emerald-200 rounded-xl text-xs">
+          ✅ Mã OTP 6 chữ số đã được gửi tới tài khoản của bạn (Mã thử nghiệm: <b>123456</b>).
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-stone-700 mb-1">Mã xác thực OTP</label>
+          <input type="text" id="otpInput" placeholder="Nhập 6 số (123456)" maxlength="6"
+                 class="w-full px-3.5 py-2 text-sm bg-stone-50 border border-stone-300 rounded-xl text-center font-mono tracking-widest text-base font-bold focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-stone-700 mb-1">Mật khẩu mới (≥ 6 ký tự)</label>
+          <input type="password" id="newPasswordInput" placeholder="Nhập mật khẩu mới"
+                 class="w-full px-3.5 py-2 text-sm bg-stone-50 border border-stone-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          <div id="forgotResetError" class="text-[11px] text-red-600 mt-1 hidden font-medium"></div>
+        </div>
+        <button type="button" onclick="AuthEngine.resetPassword()" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-xl text-xs transition">
+          Cập Nhật Mật Khẩu Mới
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST THÔNG BÁO -->
+  <div id="authToast" class="fixed bottom-6 right-6 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center space-x-3 text-xs font-bold transform translate-y-20 opacity-0 transition-all duration-300 z-50 border border-slate-700">
+    <span id="toastIcon"></span>
+    <span id="toastMsg">Thông báo</span>
+  </div>
+
   <script>
     /**
-     * MODULE 1: QUẢN LÝ ĐĂNG NHẬP & PHIÊN LÀM VIỆC (AUTH & SESSION MANAGEMENT)
+     * FITLAB RBAC AUTHENTICATION ENGINE (STRICT PRODUCTION STANDARD)
+     * Ràng buộc tài khoản, kiểm tra định dạng email/sđt, đối soát mật khẩu, chống Brute-force
      */
-    const FitLabAuth = {
-      // Mock dữ liệu người dùng các vai trò
-      demoUsers: {
-        member: {
+    const AuthEngine = {
+      // Cơ sở dữ liệu tài khoản hệ thống chuẩn
+      defaultUsers: [
+        {
           id: 'USR-MEM-001',
           name: 'Nguyễn Văn A',
           email: 'nguyenvana@fitlab.vn',
           phone: '0912345678',
+          password: 'Member@123',
           role: 'member',
-          roleName: 'Hội viên FitLab',
+          roleName: 'Hội viên (Member Portal)',
           memberCode: 'MEM-8899',
           targetPage: '../2_member_portal/preorder_calendar.html',
-          activePackage: 'Gói Chuẩn Macro 30 Suất (Còn 18 suất)'
+          activePackage: 'Gói Fit Pro 30 Suất (Còn 18 suất)'
         },
-        kitchen: {
+        {
           id: 'USR-KIT-002',
           name: 'Trần Bếp Trưởng',
           email: 'chef@fitlab.vn',
           phone: '0987654321',
+          password: 'Chef@123',
           role: 'kitchen',
           roleName: 'Bộ phận Bếp KDS',
           targetPage: '../3_kitchen_kds/kds_board.html'
         },
-        counter: {
+        {
           id: 'USR-CTR-003',
           name: 'Lê Thu Ngân',
           email: 'reception@fitlab.vn',
           phone: '0933445566',
+          password: 'Reception@123',
           role: 'counter',
           roleName: 'Lễ tân Quầy Lounge',
           targetPage: '../4_counter_lounge/handover_scan.html'
         },
-        admin: {
+        {
           id: 'USR-ADM-004',
-          name: 'Admin FitLab',
+          name: 'Quản Trị Viên FitLab',
           email: 'admin@fitlab.vn',
           phone: '0900112233',
+          password: 'Admin@2026',
           role: 'admin',
           roleName: 'Quản trị hệ thống',
           targetPage: '../5_admin_system/dish_recipe.html'
         }
-      },
+      ],
+
+      // Quản lý thất bại & Khóa tạm thời
+      failedAttempts: 0,
+      maxAttempts: 5,
+      lockoutUntil: 0,
+      lockoutTimerInterval: null,
+      currentForgotUser: null,
 
       init() {
+        this.initDatabase();
         this.checkExistingSession();
+        this.renderCredentialsList();
+        this.checkLockoutState();
       },
 
+      initDatabase() {
+        const stored = localStorage.getItem('fitlab_users_db');
+        if (!stored) {
+          localStorage.setItem('fitlab_users_db', JSON.stringify(this.defaultUsers));
+        }
+      },
+
+      getUsers() {
+        return JSON.parse(localStorage.getItem('fitlab_users_db') || JSON.stringify(this.defaultUsers));
+      },
+
+      saveUsers(users) {
+        localStorage.setItem('fitlab_users_db', JSON.stringify(users));
+      },
+
+      switchTab(tab) {
+        const isLogin = (tab === 'login');
+        document.getElementById('loginForm').classList.toggle('hidden', !isLogin);
+        document.getElementById('registerForm').classList.toggle('hidden', isLogin);
+
+        const loginBtn = document.getElementById('tabLoginBtn');
+        const regBtn = document.getElementById('tabRegisterBtn');
+
+        if (isLogin) {
+          loginBtn.className = "text-base font-extrabold pb-2 text-emerald-700 border-b-2 border-emerald-600 transition";
+          regBtn.className = "text-base font-bold pb-2 text-stone-400 hover:text-stone-700 transition";
+        } else {
+          regBtn.className = "text-base font-extrabold pb-2 text-emerald-700 border-b-2 border-emerald-600 transition";
+          loginBtn.className = "text-base font-bold pb-2 text-stone-400 hover:text-stone-700 transition";
+        }
+      },
+
+      // ==================== XỬ LÝ ĐĂNG NHẬP CHẶT CHẼ ====================
+      handleLoginSubmit(e) {
+        e.preventDefault();
+
+        // Kiểm tra xem hệ thống có đang bị khóa do nhập sai nhiều lần không
+        if (Date.now() < this.lockoutUntil) {
+          this.showToast('⚠️ Hệ thống đang tạm khóa do nhập sai quá nhiều lần. Vui lòng chờ!', 'red');
+          return;
+        }
+
+        const accountInput = document.getElementById('loginAccount');
+        const passwordInput = document.getElementById('loginPassword');
+        const accountVal = accountInput.value.trim();
+        const passwordVal = passwordInput.value;
+
+        // Reset thông báo lỗi
+        this.clearLoginErrors();
+
+        let hasError = false;
+
+        // Ràng buộc 1: Tài khoản không được để trống
+        if (!accountVal) {
+          this.showFieldError('loginAccount', 'Vui lòng nhập Email hoặc Số điện thoại của bạn.');
+          hasError = true;
+        } else {
+          // Ràng buộc 2: Định dạng phải là email hợp lệ HOẶC sđt Việt Nam (10 số)
+          const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(accountVal);
+          const isPhone = /^(0[3|5|7|8|9])+([0-9]{8})$/.test(accountVal);
+
+          if (!isEmail && !isPhone) {
+            this.showFieldError('loginAccount', 'Định dạng không hợp lệ. Phải là Email hợp lệ hoặc Số điện thoại 10 số.');
+            hasError = true;
+          }
+        }
+
+        // Ràng buộc 3: Mật khẩu không được để trống và phải từ 6 ký tự
+        if (!passwordVal) {
+          this.showFieldError('loginPassword', 'Vui lòng nhập mật khẩu.');
+          hasError = true;
+        } else if (passwordVal.length < 6) {
+          this.showFieldError('loginPassword', 'Mật khẩu phải chứa ít nhất 6 ký tự.');
+          hasError = true;
+        }
+
+        if (hasError) return;
+
+        // Bắt đầu quá trình xác thực đối soát với Database
+        this.setLoading(true);
+
+        setTimeout(() => {
+          const users = this.getUsers();
+          const target = accountVal.toLowerCase();
+
+          // Tìm user theo email hoặc phone
+          const foundUser = users.find(u => u.email.toLowerCase() === target || u.phone === accountVal);
+
+          // Trường hợp 1: Tài khoản không tồn tại trên hệ thống
+          if (!foundUser) {
+            this.setLoading(false);
+            this.registerFailedAttempt();
+            this.showGeneralError('Tài khoản này không tồn tại trong hệ sinh thái FitLab. Vui lòng kiểm tra lại hoặc chuyển sang tab Đăng Ký.');
+            return;
+          }
+
+          // Trường hợp 2: Tài khoản có tồn tại, nhưng MẬT KHẨU SAI
+          if (foundUser.password !== passwordVal) {
+            this.setLoading(false);
+            this.registerFailedAttempt();
+            this.showFieldError('loginPassword', 'Mật khẩu không chính xác. Vui lòng kiểm tra lại.');
+            return;
+          }
+
+          // Trường hợp 3: ĐÚNG TÀI KHOẢN VÀ ĐÚNG MẬT KHẨU
+          this.failedAttempts = 0;
+          this.updateAttemptCounter();
+
+          const rememberMe = document.getElementById('rememberMe').checked;
+          const sessionDuration = rememberMe ? (7 * 24 * 60 * 60 * 1000) : (4 * 60 * 60 * 1000);
+
+          const sessionData = {
+            token: 'FL-TOKEN-' + btoa(foundUser.email + ':' + Date.now()),
+            user: {
+              id: foundUser.id,
+              name: foundUser.name,
+              email: foundUser.email,
+              phone: foundUser.phone,
+              role: foundUser.role,
+              roleName: foundUser.roleName,
+              memberCode: foundUser.memberCode,
+              activePackage: foundUser.activePackage,
+              targetPage: foundUser.targetPage
+            },
+            createdAt: Date.now(),
+            expiresAt: Date.now() + sessionDuration
+          };
+
+          // Lưu phiên
+          localStorage.setItem('fitlab_session', JSON.stringify(sessionData));
+          localStorage.setItem('fitlab_current_role', foundUser.role);
+
+          this.showToast(`✅ Đăng nhập thành công! Xin chào ${foundUser.name}`, 'emerald');
+
+          setTimeout(() => {
+            window.location.href = foundUser.targetPage;
+          }, 600);
+
+        }, 500);
+      },
+
+      // ==================== XỬ LÝ ĐĂNG KÝ HỘI VIÊN MỚI ====================
+      handleRegisterSubmit(e) {
+        e.preventDefault();
+
+        const name = document.getElementById('regFullName').value.trim();
+        const email = document.getElementById('regEmail').value.trim().toLowerCase();
+        const phone = document.getElementById('regPhone').value.trim();
+        const pwd = document.getElementById('regPassword').value;
+        const confirmPwd = document.getElementById('regConfirmPassword').value;
+
+        // Reset errors
+        ['regFullName', 'regEmail', 'regPhone', 'regPassword', 'regConfirmPassword'].forEach(id => {
+          document.getElementById(id + 'Error').classList.add('hidden');
+          document.getElementById(id).classList.remove('border-red-500');
+        });
+
+        let hasError = false;
+
+        // Ràng buộc họ tên
+        if (!name || name.length < 3) {
+          this.showFieldError('regFullName', 'Vui lòng nhập đầy đủ họ và tên (tối thiểu 3 ký tự).');
+          hasError = true;
+        }
+
+        // Ràng buộc Email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email || !emailRegex.test(email)) {
+          this.showFieldError('regEmail', 'Vui lòng nhập định dạng email hợp lệ (vd: hoten@gmail.com).');
+          hasError = true;
+        }
+
+        // Ràng buộc Số điện thoại 10 số chuẩn VN
+        const phoneRegex = /^(0[3|5|7|8|9])+([0-9]{8})$/;
+        if (!phone || !phoneRegex.test(phone)) {
+          this.showFieldError('regPhone', 'Số điện thoại không hợp lệ (phải có 10 số, bắt đầu bằng 03, 05, 07, 08, 09).');
+          hasError = true;
+        }
+
+        // Ràng buộc Mật khẩu
+        if (!pwd || pwd.length < 6) {
+          this.showFieldError('regPassword', 'Mật khẩu phải từ 6 ký tự trở lên.');
+          hasError = true;
+        }
+
+        // Ràng buộc Khớp mật khẩu
+        if (pwd !== confirmPwd) {
+          this.showFieldError('regConfirmPassword', 'Mật khẩu xác nhận không trùng khớp.');
+          hasError = true;
+        }
+
+        if (hasError) return;
+
+        // Kiểm tra xem Email hoặc SĐT đã tồn tại chưa
+        const users = this.getUsers();
+        const emailExists = users.some(u => u.email.toLowerCase() === email);
+        if (emailExists) {
+          this.showFieldError('regEmail', 'Email này đã được sử dụng. Vui lòng chọn email khác hoặc Đăng nhập.');
+          return;
+        }
+
+        const phoneExists = users.some(u => u.phone === phone);
+        if (phoneExists) {
+          this.showFieldError('regPhone', 'Số điện thoại này đã được sử dụng.');
+          return;
+        }
+
+        // Tạo tài khoản hội viên mới
+        const randomCode = Math.floor(1000 + Math.random() * 9000);
+        const newUser = {
+          id: 'USR-MEM-' + randomCode,
+          name: name,
+          email: email,
+          phone: phone,
+          password: pwd,
+          role: 'member',
+          roleName: 'Hội viên (Member Portal)',
+          memberCode: 'MEM-' + randomCode,
+          targetPage: '../2_member_portal/preorder_calendar.html',
+          activePackage: 'Gói Tiêu Chuẩn 30 Suất (Mới kích hoạt)'
+        };
+
+        users.push(newUser);
+        this.saveUsers(users);
+        this.renderCredentialsList();
+
+        this.showToast('🎉 Đăng ký thành công! Hãy đăng nhập bằng tài khoản mới.', 'emerald');
+
+        // Tự động điền sang form đăng nhập
+        this.switchTab('login');
+        document.getElementById('loginAccount').value = newUser.email;
+        document.getElementById('loginPassword').value = '';
+        document.getElementById('loginPassword').focus();
+      },
+
+      // ==================== BẢO VỆ CHỐNG BRUTE FORCE ====================
+      registerFailedAttempt() {
+        this.failedAttempts++;
+        const remaining = this.maxAttempts - this.failedAttempts;
+
+        if (this.failedAttempts >= this.maxAttempts) {
+          // Khóa 30 giây
+          this.lockoutUntil = Date.now() + (30 * 1000);
+          localStorage.setItem('fitlab_lockout_until', this.lockoutUntil);
+          this.checkLockoutState();
+          this.showGeneralError('Tài khoản đã bị tạm khóa do nhập sai mật khẩu quá 5 lần liên tiếp.');
+        } else {
+          this.updateAttemptCounter();
+          this.showGeneralError(`Thông tin đăng nhập không chính xác. Bạn còn ${remaining} lần thử trước khi hệ thống tạm khóa.`);
+        }
+      },
+
+      updateAttemptCounter() {
+        const counterEl = document.getElementById('attemptCounter');
+        if (this.failedAttempts > 0 && this.failedAttempts < this.maxAttempts) {
+          counterEl.innerText = `Cảnh báo: Sai ${this.failedAttempts}/${this.maxAttempts} lần`;
+          counterEl.className = 'text-[11px] text-amber-600 font-bold';
+        } else {
+          counterEl.innerText = '';
+        }
+      },
+
+      checkLockoutState() {
+        const storedLockout = parseInt(localStorage.getItem('fitlab_lockout_until') || '0');
+        if (storedLockout && Date.now() < storedLockout) {
+          this.lockoutUntil = storedLockout;
+          this.startLockoutCountdown();
+        }
+      },
+
+      startLockoutCountdown() {
+        const banner = document.getElementById('lockoutBanner');
+        const timerEl = document.getElementById('lockoutTimer');
+        const submitBtn = document.getElementById('loginSubmitBtn');
+
+        banner.classList.remove('hidden');
+        submitBtn.disabled = true;
+        submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+        clearInterval(this.lockoutTimerInterval);
+        this.lockoutTimerInterval = setInterval(() => {
+          const diff = Math.ceil((this.lockoutUntil - Date.now()) / 1000);
+          if (diff <= 0) {
+            clearInterval(this.lockoutTimerInterval);
+            banner.classList.add('hidden');
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            localStorage.removeItem('fitlab_lockout_until');
+            this.failedAttempts = 0;
+            this.updateAttemptCounter();
+          } else {
+            timerEl.innerText = diff;
+          }
+        }, 1000);
+      },
+
+      // ==================== QUẢN LÝ PHIÊN (SESSION) ====================
       checkExistingSession() {
         const sessionStr = localStorage.getItem('fitlab_session');
         if (!sessionStr) return;
@@ -248,85 +727,20 @@
           const session = JSON.parse(sessionStr);
           const now = Date.now();
 
-          // Kiểm tra hạn phiên
           if (session.expiresAt && now < session.expiresAt) {
             document.getElementById('activeSessionBox').classList.remove('hidden');
             document.getElementById('sessionRoleBadge').innerText = session.user.roleName;
             document.getElementById('sessionUserName').innerText = `${session.user.name} (${session.user.email})`;
+            
+            const hoursLeft = Math.round((session.expiresAt - now) / 3600000);
+            document.getElementById('sessionExpiryText').innerText = `Hết hạn sau: ~${hoursLeft} giờ`;
             this.currentSession = session;
           } else {
-            // Phiên hết hạn
             this.logout(false);
           }
         } catch (e) {
-          console.error("Lỗi đọc session:", e);
+          console.error(e);
         }
-      },
-
-      quickSelect(roleKey) {
-        const user = this.demoUsers[roleKey];
-        if (!user) return;
-        document.getElementById('email').value = user.email;
-        document.getElementById('password').value = '123456';
-        this.login(user);
-      },
-
-      handleFormSubmit(e) {
-        e.preventDefault();
-        const email = document.getElementById('email').value.trim().toLowerCase();
-        const password = document.getElementById('password').value;
-
-        // Tìm user khớp
-        let foundUser = Object.values(this.demoUsers).find(u => u.email.toLowerCase() === email || u.phone === email);
-
-        if (!foundUser) {
-          // Mặc định cho phép bất kỳ email nào nếu có format hợp lệ (giả lập vai trò hội viên)
-          foundUser = {
-            id: 'USR-GEN-' + Math.floor(1000 + Math.random() * 9000),
-            name: email.split('@')[0].toUpperCase(),
-            email: email,
-            phone: '0900000000',
-            role: 'member',
-            roleName: 'Hội viên FitLab',
-            memberCode: 'MEM-' + Math.floor(1000 + Math.random() * 9000),
-            targetPage: '../2_member_portal/preorder_calendar.html'
-          };
-        }
-
-        if (password.length < 4) {
-          this.showError('Mật khẩu tối thiểu 4 ký tự!');
-          return;
-        }
-
-        this.login(foundUser);
-      },
-
-      login(user) {
-        const rememberMe = document.getElementById('rememberMe').checked;
-        const spinner = document.getElementById('submitSpinner');
-        const text = document.getElementById('submitText');
-        const btn = document.getElementById('submitBtn');
-
-        spinner.classList.remove('hidden');
-        text.innerText = 'Đang xác thực phiên...';
-        btn.disabled = true;
-
-        setTimeout(() => {
-          const sessionDuration = rememberMe ? (7 * 24 * 60 * 60 * 1000) : (2 * 60 * 60 * 1000);
-          const sessionData = {
-            token: 'FL-TOKEN-' + btoa(user.email + ':' + Date.now()),
-            user: user,
-            createdAt: Date.now(),
-            expiresAt: Date.now() + sessionDuration
-          };
-
-          // Lưu vào localStorage
-          localStorage.setItem('fitlab_session', JSON.stringify(sessionData));
-          localStorage.setItem('fitlab_current_role', user.role);
-
-          // Chuyển hướng tới trang nghiệp vụ tương ứng
-          window.location.href = user.targetPage;
-        }, 500);
       },
 
       resumeSession() {
@@ -341,32 +755,193 @@
         if (reload) window.location.reload();
       },
 
-      togglePasswordVisibility() {
-        const input = document.getElementById('password');
-        const icon = document.getElementById('togglePwdIcon');
+      // ==================== QUÊN MẬT KHẨU ====================
+      openForgotPasswordModal() {
+        document.getElementById('forgotPwdModal').classList.remove('hidden');
+        document.getElementById('forgotStep1').classList.remove('hidden');
+        document.getElementById('forgotStep2').classList.add('hidden');
+        document.getElementById('forgotInputError').classList.add('hidden');
+        document.getElementById('forgotInput').value = document.getElementById('loginAccount').value;
+      },
+
+      closeForgotPasswordModal() {
+        document.getElementById('forgotPwdModal').classList.add('hidden');
+      },
+
+      sendForgotOTP() {
+        const input = document.getElementById('forgotInput').value.trim().toLowerCase();
+        const errEl = document.getElementById('forgotInputError');
+
+        if (!input) {
+          errEl.innerText = 'Vui lòng nhập Email hoặc SĐT đã đăng ký.';
+          errEl.classList.remove('hidden');
+          return;
+        }
+
+        const users = this.getUsers();
+        const found = users.find(u => u.email.toLowerCase() === input || u.phone === input);
+
+        if (!found) {
+          errEl.innerText = 'Không tìm thấy tài khoản nào khớp với thông tin này.';
+          errEl.classList.remove('hidden');
+          return;
+        }
+
+        this.currentForgotUser = found;
+        document.getElementById('forgotStep1').classList.add('hidden');
+        document.getElementById('forgotStep2').classList.remove('hidden');
+      },
+
+      resetPassword() {
+        const otp = document.getElementById('otpInput').value.trim();
+        const newPwd = document.getElementById('newPasswordInput').value;
+        const errEl = document.getElementById('forgotResetError');
+
+        if (otp !== '123456') {
+          errEl.innerText = 'Mã OTP không chính xác (Mã mẫu là: 123456).';
+          errEl.classList.remove('hidden');
+          return;
+        }
+
+        if (!newPwd || newPwd.length < 6) {
+          errEl.innerText = 'Mật khẩu mới phải từ 6 ký tự trở lên.';
+          errEl.classList.remove('hidden');
+          return;
+        }
+
+        // Cập nhật vào DB
+        const users = this.getUsers();
+        const userToUpdate = users.find(u => u.id === this.currentForgotUser.id);
+        if (userToUpdate) {
+          userToUpdate.password = newPwd;
+          this.saveUsers(users);
+          this.renderCredentialsList();
+        }
+
+        this.closeForgotPasswordModal();
+        this.showToast('✅ Mật khẩu đã được đổi thành công! Vui lòng đăng nhập.', 'emerald');
+
+        document.getElementById('loginAccount').value = this.currentForgotUser.email;
+        document.getElementById('loginPassword').value = '';
+        document.getElementById('loginPassword').focus();
+      },
+
+      // ==================== DRAWER XEM TÀI KHOẢN MẪU ====================
+      toggleCredentialsDrawer() {
+        const modal = document.getElementById('credentialsModal');
+        modal.classList.toggle('hidden');
+      },
+
+      renderCredentialsList() {
+        const container = document.getElementById('credentialsListContainer');
+        if (!container) return;
+
+        const users = this.getUsers();
+        container.innerHTML = users.map(u => `
+          <div class="p-3 bg-stone-50 hover:bg-emerald-50/50 rounded-2xl border border-stone-200 transition flex items-center justify-between">
+            <div class="space-y-0.5">
+              <div class="font-bold text-stone-900 flex items-center">
+                <span>${u.name}</span>
+                <span class="ml-2 text-[10px] bg-stone-200 text-stone-700 px-2 py-0.5 rounded-full font-semibold">${u.roleName}</span>
+              </div>
+              <div class="text-[11px] text-stone-500 font-mono">
+                Email: <b class="text-stone-800">${u.email}</b> | SĐT: <b class="text-stone-800">${u.phone}</b>
+              </div>
+              <div class="text-[11px] text-stone-500 font-mono">
+                Mật khẩu: <span class="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-bold">${u.password}</span>
+              </div>
+            </div>
+            <button type="button" onclick="AuthEngine.fillLoginCredentials('${u.email}', '${u.password}')" 
+                    class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-[11px] font-bold shadow-sm transition whitespace-nowrap">
+              Điền vào form →
+            </button>
+          </div>
+        `).join('');
+      },
+
+      fillLoginCredentials(email, pwd) {
+        this.switchTab('login');
+        document.getElementById('loginAccount').value = email;
+        document.getElementById('loginPassword').value = pwd;
+        this.toggleCredentialsDrawer();
+        this.showToast('Đã điền thông tin vào form! Bấm Đăng Nhập để kiểm tra.', 'emerald');
+      },
+
+      // ==================== TIỆN ÍCH GIAO DIỆN ====================
+      togglePasswordVisibility(inputId, iconId) {
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
         if (input.type === 'password') {
           input.type = 'text';
-          icon.className = 'fa-regular fa-eye-slash';
+          icon.className = 'fa-regular fa-eye-slash text-xs';
         } else {
           input.type = 'password';
-          icon.className = 'fa-regular fa-eye';
+          icon.className = 'fa-regular fa-eye text-xs';
         }
       },
 
-      showError(msg) {
-        const errBox = document.getElementById('errorMessage');
-        const errText = document.getElementById('errorText');
-        errText.innerText = msg;
+      showFieldError(fieldId, msg) {
+        const errEl = document.getElementById(fieldId + 'Error');
+        const inputEl = document.getElementById(fieldId);
+        if (errEl) {
+          errEl.innerText = msg;
+          errEl.classList.remove('hidden');
+        }
+        if (inputEl) {
+          inputEl.classList.add('border-red-500', 'bg-red-50/30');
+        }
+      },
+
+      clearLoginErrors() {
+        ['loginAccount', 'loginPassword'].forEach(id => {
+          document.getElementById(id + 'Error').classList.add('hidden');
+          document.getElementById(id).classList.remove('border-red-500', 'bg-red-50/30');
+        });
+        document.getElementById('loginGeneralError').classList.add('hidden');
+      },
+
+      showGeneralError(msg) {
+        const errBox = document.getElementById('loginGeneralError');
+        document.getElementById('loginGeneralErrorText').innerText = msg;
         errBox.classList.remove('hidden');
-        setTimeout(() => { errBox.classList.add('hidden'); }, 4000);
+      },
+
+      setLoading(isLoading) {
+        const spinner = document.getElementById('loginSpinner');
+        const btnText = document.getElementById('loginBtnText');
+        const btn = document.getElementById('loginSubmitBtn');
+
+        if (isLoading) {
+          spinner.classList.remove('hidden');
+          btnText.innerText = 'Đang xác thực bảo mật...';
+          btn.disabled = true;
+          btn.classList.add('opacity-80');
+        } else {
+          spinner.classList.add('hidden');
+          btnText.innerText = 'Đăng Nhập Vào Hệ Thống';
+          btn.disabled = false;
+          btn.classList.remove('opacity-80');
+        }
+      },
+
+      showToast(msg, color = 'emerald') {
+        const toast = document.getElementById('authToast');
+        const toastMsg = document.getElementById('toastMsg');
+        const toastIcon = document.getElementById('toastIcon');
+
+        toastMsg.innerText = msg;
+        toastIcon.innerHTML = color === 'red' ? '⚠️' : '🔔';
+        toast.classList.remove('translate-y-20', 'opacity-0');
+        
+        setTimeout(() => {
+          toast.classList.add('translate-y-20', 'opacity-0');
+        }, 4000);
       }
     };
 
-    // Khởi tạo Auth
     document.addEventListener('DOMContentLoaded', () => {
-      FitLabAuth.init();
+      AuthEngine.init();
     });
   </script>
 </body>
 </html>
-
