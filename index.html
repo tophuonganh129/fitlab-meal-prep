@@ -2,19 +2,24 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>FitLab Meal Prep - Khung Hệ Thống & Phân Công</title>
+  <title>FitLab Meal Prep - Khung Hệ Thống Tổng Thể</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-stone-100 p-8 font-sans">
   <div class="max-w-6xl mx-auto">
     <div class="bg-green-900 text-white p-6 rounded-xl shadow mb-8 flex justify-between items-center">
       <div>
-        <h1 class="text-2xl font-bold">HỆ THỐNG FITLAB MEAL PREP - KHUNG GIAO DIỆN TỔNG (SKELETON)</h1>
-        <p class="text-green-200 text-sm mt-1">Bấm vào từng phân hệ bên dưới để mở khung màn hình và code logic nghiệp vụ tương ứng</p>
+        <h1 class="text-2xl font-bold">HỆ THỐNG FITLAB MEAL PREP - KHUNG GIAO DIỆN TỔNG</h1>
+        <p class="text-green-200 text-sm mt-1">Bấm vào từng phân hệ bên dưới để mở màn hình và chức năng tương ứng</p>
       </div>
-      <a href="modules/1_auth/login.html" class="bg-white text-green-900 px-4 py-2 rounded-lg font-bold shadow hover:bg-green-50">
-        🔐 Màn hình Đăng nhập (Dịu & Lan)
-      </a>
+      <div class="flex items-center space-x-3">
+        <a href="tests/test_runner.html" class="bg-emerald-800 text-white px-4 py-2 rounded-lg font-bold shadow hover:bg-emerald-700 text-sm border border-emerald-600">
+          🧪 Test Suite Kiểm Thử
+        </a>
+        <a href="modules/1_auth/login.html" class="bg-white text-green-900 px-4 py-2 rounded-lg font-bold shadow hover:bg-green-50 text-sm">
+          🔐 Màn hình Đăng nhập
+        </a>
+      </div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -24,19 +29,19 @@
         <ul class="space-y-3 text-sm">
           <li class="flex justify-between items-center p-2 bg-stone-50 rounded">
             <span>📊 Nhập chỉ số InBody & Dị ứng (R06-R09)</span>
-            <a href="modules/2_member_portal/inbody_allergy.html" class="text-blue-600 font-semibold hover:underline">[Linh & Dịu code] →</a>
+            <a href="modules/2_member_portal/inbody_allergy.html" class="text-blue-600 font-semibold hover:underline">Chi tiết →</a>
           </li>
           <li class="flex justify-between items-center p-2 bg-stone-50 rounded">
             <span>🥗 Thực đơn gợi ý & Hoán đổi món ±5% (R13-R17)</span>
-            <a href="modules/2_member_portal/menu_swap.html" class="text-blue-600 font-semibold hover:underline">[Linh & Dịu code] →</a>
+            <a href="modules/2_member_portal/menu_swap.html" class="text-blue-600 font-semibold hover:underline">Chi tiết →</a>
           </li>
           <li class="flex justify-between items-center p-2 bg-stone-50 rounded">
             <span>📅 Lịch đặt suất ăn trước 20h00 & Gói ăn (R18-R24)</span>
-            <a href="modules/2_member_portal/preorder_calendar.html" class="text-blue-600 font-semibold hover:underline">[Dịu & P.Anh code] →</a>
+            <a href="modules/2_member_portal/preorder_calendar.html" class="text-blue-600 font-semibold hover:underline">Chi tiết →</a>
           </li>
           <li class="flex justify-between items-center p-2 bg-stone-50 rounded">
             <span>📱 Theo dõi tiến độ nấu & Mã QR nhận đồ</span>
-            <a href="modules/2_member_portal/order_qr_status.html" class="text-blue-600 font-semibold hover:underline">[P.Anh & Lan code] →</a>
+            <a href="modules/2_member_portal/order_qr_status.html" class="text-blue-600 font-semibold hover:underline">Chi tiết →</a>
           </li>
         </ul>
       </div>
@@ -54,7 +59,7 @@
           </div>
         </div>
         <a href="modules/3_kitchen_kds/kds_board.html" class="block text-center bg-amber-600 text-white py-2 rounded-lg font-bold hover:bg-amber-700">
-          👨‍🍳 Mở Khung Màn Hình Bếp KDS [Dịu & P.Anh code] →
+          👨‍🍳 Mở Khung Màn Hình Bếp KDS →
         </a>
       </div>
 
@@ -64,11 +69,11 @@
         <ul class="space-y-3 text-sm">
           <li class="flex justify-between items-center p-2 bg-stone-50 rounded">
             <span>🔍 Quét mã thẻ trả đồ, Xử lý No-show & Dời ca</span>
-            <a href="modules/4_counter_lounge/handover_scan.html" class="text-blue-600 font-semibold hover:underline">[Dịu & P.Anh code] →</a>
+            <a href="modules/4_counter_lounge/handover_scan.html" class="text-blue-600 font-semibold hover:underline">Chi tiết →</a>
           </li>
           <li class="flex justify-between items-center p-2 bg-stone-50 rounded">
             <span>💳 Bán gói suất ăn & Liên kết thẻ tập tại chỗ</span>
-            <a href="modules/4_counter_lounge/package_topup.html" class="text-blue-600 font-semibold hover:underline">[Dịu & Linh code] →</a>
+            <a href="modules/4_counter_lounge/package_topup.html" class="text-blue-600 font-semibold hover:underline">Chi tiết →</a>
           </li>
         </ul>
       </div>
@@ -79,19 +84,19 @@
         <ul class="space-y-3 text-sm">
           <li class="flex justify-between items-center p-2 bg-stone-50 rounded">
             <span>🍲 Quản lý món, Định lượng & Gạt nút "Tạm hết món"</span>
-            <a href="modules/5_admin_system/dish_recipe.html" class="text-blue-600 font-semibold hover:underline">[Linh & P.Anh code] →</a>
+            <a href="modules/5_admin_system/dish_recipe.html" class="text-blue-600 font-semibold hover:underline">Chi tiết →</a>
           </li>
           <li class="flex justify-between items-center p-2 bg-stone-50 rounded">
             <span>⚙️ Cấu hình công thức BMR, TDEE, hệ số PAL</span>
-            <a href="modules/5_admin_system/macro_config.html" class="text-blue-600 font-semibold hover:underline">[Dịu code] →</a>
+            <a href="modules/5_admin_system/macro_config.html" class="text-blue-600 font-semibold hover:underline">Chi tiết →</a>
           </li>
           <li class="flex justify-between items-center p-2 bg-stone-50 rounded">
             <span>📈 Báo cáo tiêu hao, Doanh thu & Khóa kỳ đối soát</span>
-            <a href="modules/5_admin_system/reports_lock.html" class="text-blue-600 font-semibold hover:underline">[Linh & P.Anh code] →</a>
+            <a href="modules/5_admin_system/reports_lock.html" class="text-blue-600 font-semibold hover:underline">Chi tiết →</a>
           </li>
           <li class="flex justify-between items-center p-2 bg-stone-50 rounded">
             <span>🛡️ Quản lý TK (Read-only InBody), RBAC & Audit Log</span>
-            <a href="modules/5_admin_system/user_rbac_audit.html" class="text-blue-600 font-semibold hover:underline">[Linh & Lan code] →</a>
+            <a href="modules/5_admin_system/user_rbac_audit.html" class="text-blue-600 font-semibold hover:underline">Chi tiết →</a>
           </li>
         </ul>
       </div>
