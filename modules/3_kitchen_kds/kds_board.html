@@ -4,19 +4,29 @@
   <meta charset="UTF-8">
   <title>Màn hình KDS Bếp - FitLab Meal Prep</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-slate-900 text-white p-6 font-sans">
+<body class="bg-slate-900 text-white p-6 font-sans min-h-screen">
   <!-- Thanh trạng thái KDS -->
   <div class="flex justify-between items-center border-b border-slate-700 pb-4 mb-6">
     <div>
-      <a href="../../index.html" class="text-amber-400 text-sm hover:underline">← Quay lại Trang điều hướng tổng</a>
+      <div class="flex items-center space-x-3">
+        <a href="../../index.html" class="text-amber-400 text-sm hover:underline">← Quay lại Trang điều hướng tổng</a>
+        <span class="text-xs bg-slate-800 text-slate-400 px-2 py-0.5 rounded border border-slate-700">
+          KDS UI: P.Anh | Logic 1-chạm: Thu Lan
+        </span>
+      </div>
       <h1 class="text-2xl font-bold mt-1">👨‍🍳 MÀN HÌNH ĐIỀU PHỐI CHẾ BIẾN BẾP (KDS) - MỤC 2.1.5</h1>
     </div>
-    <div class="flex gap-3">
-      <span class="bg-green-700 px-3 py-1.5 rounded text-sm font-semibold">🟢 WebSocket Realtime: Đang kết nối</span>
-      <select class="bg-slate-800 border border-slate-600 px-3 py-1.5 rounded text-sm">
-        <option>Ca nhận: 17:30 - 18:00 (Hôm nay)</option>
-        <option>Ca nhận: 19:00 - 19:30 (Hôm nay)</option>
+    <div class="flex items-center gap-3">
+      <span id="wsStatus" class="bg-green-700 px-3 py-1.5 rounded text-sm font-semibold flex items-center">
+        <span class="w-2 h-2 rounded-full bg-white animate-pulse mr-2"></span>
+        WebSocket Realtime: Đang kết nối
+      </span>
+      <select id="shiftFilter" onchange="KDSManager.changeShift()" class="bg-slate-800 border border-slate-600 px-3 py-1.5 rounded text-sm text-white focus:outline-none">
+        <option value="17:30 - 18:00">Ca nhận: 17:30 - 18:00 (Hôm nay)</option>
+        <option value="19:00 - 19:30">Ca nhận: 19:00 - 19:30 (Hôm nay)</option>
+        <option value="11:30 - 12:30">Ca nhận: 11:30 - 12:30 (Hôm nay)</option>
       </select>
     </div>
   </div>
@@ -24,67 +34,307 @@
   <!-- Chia 2 cột chuẩn nghiệp vụ 2.1.5 -->
   <div class="grid grid-cols-12 gap-6">
     <!-- CỘT TRÁI: BẢNG TỔNG HỢP MẺ NẤU (BATCH SUMMARY) -->
-    <div class="col-span-5 bg-slate-800 p-5 rounded-xl border border-slate-700">
-      <h2 class="text-lg font-bold text-amber-400 mb-2">1. BẢNG TỔNG HỢP MẺ NẤU THEO CA (HĐ 2 - HĐ 4)</h2>
-      <p class="text-xs text-slate-400 mb-4">Gom tổng nguyên liệu của các đơn trong ca để nấu mẻ lớn</p>
-      
-      <!-- TODO: [Thu Dịu] Gắn API lấy tổng định lượng mẻ nấu tại đây -->
-      <table class="w-full text-sm text-left mb-6">
-        <thead class="bg-slate-700 text-slate-300">
-          <tr>
-            <th class="p-2">Thành phần chế biến</th>
-            <th class="p-2">Tổng lượng thô</th>
-            <th class="p-2">Tổng lượng chín</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-700">
-          <tr><td class="p-2">Ức gà áp chảo thảo mộc</td><td class="p-2">3.200 g</td><td class="p-2 font-bold text-amber-300">2.560 g</td></tr>
-          <tr><td class="p-2">Cá hồi Nauy nướng</td><td class="p-2">1.500 g</td><td class="p-2 font-bold text-amber-300">1.275 g</td></tr>
-          <tr><td class="p-2">Cơm gạo lứt hữu cơ</td><td class="p-2">1.800 g</td><td class="p-2 font-bold text-amber-300">4.140 g</td></tr>
-        </tbody>
-      </table>
+    <div class="col-span-12 lg:col-span-5 bg-slate-800 p-5 rounded-xl border border-slate-700 flex flex-col justify-between">
+      <div>
+        <h2 class="text-lg font-bold text-amber-400 mb-2">1. BẢNG TỔNG HỢP MẺ NẤU THEO CA (HĐ 2 - HĐ 4)</h2>
+        <p class="text-xs text-slate-400 mb-4">Gom tổng nguyên liệu của các đơn trong ca để nấu mẻ lớn</p>
+        
+        <!-- Bảng tổng định lượng mẻ nấu -->
+        <table class="w-full text-sm text-left mb-6">
+          <thead class="bg-slate-700 text-slate-300">
+            <tr>
+              <th class="p-2">Thành phần chế biến</th>
+              <th class="p-2">Tổng lượng thô</th>
+              <th class="p-2">Tổng lượng chín</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-700" id="batchSummaryTable">
+            <tr><td class="p-2">Ức gà áp chảo thảo mộc</td><td class="p-2">3.200 g</td><td class="p-2 font-bold text-amber-300">2.560 g</td></tr>
+            <tr><td class="p-2">Cá hồi Nauy nướng</td><td class="p-2">1.500 g</td><td class="p-2 font-bold text-amber-300">1.275 g</td></tr>
+            <tr><td class="p-2">Cơm gạo lứt hữu cơ</td><td class="p-2">1.800 g</td><td class="p-2 font-bold text-amber-300">4.140 g</td></tr>
+          </tbody>
+        </table>
+      </div>
 
-      <!-- NÚT BẤM HĐ 4 -->
-      <button onclick="alert('TODO: Gọi API chuyển toàn bộ đơn trong ca sang ĐANG CHẾ BIẾN và khóa quyền hủy/dời ca ở quầy!')" 
-              class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-3 rounded-lg shadow">
-        🔥 BẮT ĐẦU CA NẤU [17:30] (Chuyển sang Đang chế biến)
-      </button>
+      <!-- NÚT BẤM HĐ 4 (Thu Lan gắn logic bắt đầu ca nấu) -->
+      <div>
+        <button id="btnStartBatch" onclick="KDSManager.startBatchCooking()" 
+                class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-3.5 rounded-lg shadow-lg flex items-center justify-center space-x-2 transition text-base">
+          <i class="fa-solid fa-fire"></i>
+          <span id="startBatchText">🔥 BẮT ĐẦU CA NẤU [17:30] (Chuyển sang Đang chế biến)</span>
+        </button>
+        <p class="text-[11px] text-slate-400 mt-2 text-center">
+          * Khi bấm: Khóa quyền hủy/dời ca ở quầy lễ tân & Portal hội viên.
+        </p>
+      </div>
     </div>
 
     <!-- CỘT PHẢI: HÀNG THẺ SUẤT ĂN CHI TIẾT (PLATING QUEUE) -->
-    <div class="col-span-7 bg-slate-800 p-5 rounded-xl border border-slate-700">
-      <h2 class="text-lg font-bold text-green-400 mb-2">2. HÀNG THẺ CÂN CHIA KHAY CÁ NHÂN (HĐ 5 - HĐ 8)</h2>
+    <div class="col-span-12 lg:col-span-7 bg-slate-800 p-5 rounded-xl border border-slate-700">
+      <div class="flex justify-between items-center mb-2">
+        <h2 class="text-lg font-bold text-green-400">2. HÀNG THẺ CÂN CHIA KHAY CÁ NHÂN (HĐ 5 - HĐ 8)</h2>
+        <span class="text-xs bg-slate-700 text-slate-300 px-2.5 py-1 rounded font-semibold" id="queueCountBadge">
+          Đang phục vụ: 1 khay
+        </span>
+      </div>
       <p class="text-xs text-slate-400 mb-4">Đặt khay lên cân điện tử, gắp đúng số gram chín và kiểm tra nhãn dị ứng đỏ</p>
 
-      <!-- Thẻ đơn mẫu -->
-      <div class="bg-slate-900 p-4 rounded-lg border-l-4 border-red-500 mb-4">
-        <div class="flex justify-between items-start mb-2">
-          <div>
-            <span class="font-bold text-lg">#ORD-1024 - Hội viên: Nguyễn Văn A</span>
-            <span class="ml-2 bg-blue-900 text-blue-200 text-xs px-2 py-0.5 rounded">Mang đi (Hộp giữ nhiệt)</span>
-          </div>
-          <span class="bg-amber-500/20 text-amber-300 text-xs px-2 py-1 rounded">Đang chế biến</span>
-        </div>
-
-        <!-- Nhãn cảnh báo đỏ loại trừ dị ứng (HĐ 6) -->
-        <div class="bg-red-950 border border-red-600 text-red-200 px-3 py-2 rounded text-xs font-bold mb-3">
-          ⚠️ CẢNH BÁO DỊ ỨNG: DỊ ỨNG ĐẬU PHỘNG & HẢI SẢN CÓ VỎ (Tuyệt đối không dùng sốt lạc)
-        </div>
-
-        <!-- Định lượng gram thực tế cần gắp lên cân -->
-        <div class="grid grid-cols-3 gap-2 text-xs bg-slate-800 p-3 rounded mb-3">
-          <div>🍗 Ức gà chín: <b class="text-sm text-white">165g</b></div>
-          <div>🍚 Cơm gạo lứt: <b class="text-sm text-white">180g</b></div>
-          <div>🥦 Bông cải xanh: <b class="text-sm text-white">120g</b></div>
-        </div>
-
-        <!-- NÚT BẤM HĐ 7 -->
-        <button onclick="alert('TODO: Đổi trạng thái sang RA QUẦY, đẩy sang màn hình Lễ tân và bắn thông báo cho Hội viên!')"
-                class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-2.5 rounded-lg">
-          ✅ HOÀN TẤT ĐÓNG KHAY – RA QUẦY (1 Chạm)
-        </button>
+      <!-- Hàng đợi thẻ đơn (Render động theo dữ liệu đơn hàng) -->
+      <div id="platingQueueList" class="space-y-4">
+        <!-- Render thẻ đơn -->
       </div>
     </div>
   </div>
+
+  <!-- TOAST BÁO HIỆU THỜI GIAN THỰC -->
+  <div id="kdsToast" class="fixed bottom-6 right-6 bg-amber-500 text-slate-950 px-5 py-3 rounded-xl font-bold text-sm shadow-2xl flex items-center space-x-2 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+    <i class="fa-solid fa-bell text-lg"></i>
+    <span id="kdsToastText">Thông báo KDS</span>
+  </div>
+
+  <script>
+    /**
+     * MODULE 3: KITCHEN DISPLAY SYSTEM (KDS) LOGIC
+     * Phụ trách logic 1-chạm & đồng bộ trạng thái: Thu Lan
+     */
+    const KDSManager = {
+      orders: [],
+      currentShift: '17:30 - 18:00',
+      isCookingBatchStarted: false,
+
+      init() {
+        this.loadOrders();
+        this.renderQueue();
+      },
+
+      loadOrders() {
+        let savedOrders = JSON.parse(localStorage.getItem('fitlab_orders') || '[]');
+        if (savedOrders.length === 0) {
+          // Tạo đơn mặc định nếu chưa có đơn nào
+          savedOrders = [
+            {
+              orderId: 'ORD-1024',
+              customerName: 'Nguyễn Văn A',
+              memberCode: 'MEM-8899',
+              shift: '17:30 - 18:00',
+              takeaway: 'Mang đi (Hộp giữ nhiệt)',
+              status: 'COOKING',
+              allergens: ['DỊ ỨNG ĐẬU PHỘNG & HẢI SẢN CÓ VỎ (Tuyệt đối không dùng sốt lạc)'],
+              macros: {
+                chicken: '165g',
+                rice: '180g',
+                veggie: '120g'
+              }
+            }
+          ];
+          localStorage.setItem('fitlab_orders', JSON.stringify(savedOrders));
+        }
+        this.orders = savedOrders;
+      },
+
+      changeShift() {
+        this.currentShift = document.getElementById('shiftFilter').value;
+        const btnText = document.getElementById('startBatchText');
+        btnText.innerText = `🔥 BẮT ĐẦU CA NẤU [${this.currentShift.split(' - ')[0]}] (Chuyển sang Đang chế biến)`;
+        this.renderQueue();
+      },
+
+      /**
+       * HÀNH ĐỘNG 4 (HĐ 4): BẮT ĐẦU CA NẤU
+       * Chuyển tất cả đơn trong ca từ QUEUED sang COOKING
+       */
+      startBatchCooking() {
+        this.isCookingBatchStarted = true;
+        let count = 0;
+
+        this.orders.forEach(order => {
+          if (order.status === 'QUEUED' || !order.status) {
+            order.status = 'COOKING';
+            count++;
+          }
+        });
+
+        localStorage.setItem('fitlab_orders', JSON.stringify(this.orders));
+        
+        const btn = document.getElementById('btnStartBatch');
+        btn.className = 'w-full bg-green-700 text-white font-bold py-3.5 rounded-lg shadow-lg flex items-center justify-center space-x-2 transition text-base';
+        document.getElementById('startBatchText').innerText = `🔥 CA NẤU [${this.currentShift.split(' - ')[0]}] ĐANG DIỄN RA (ĐÃ KHÓA SỬA/HỦY)`;
+
+        this.playBeepSound();
+        this.showToast(`🔥 Đã bắt đầu ca nấu! Khóa quyền sửa/hủy và chuyển ${count || 1} đơn sang ĐANG CHẾ BIẾN.`);
+        this.renderQueue();
+      },
+
+      /**
+       * HÀNH ĐỘNG 7 (HĐ 7): NÚT CHUYỂN TRẠNG THÁI 1-CHẠM
+       * Bấm 1 chạm: Hoàn tất đóng khay -> Chuyển sang RA QUẦY (READY)
+       * Phát âm thanh chuông bếp và thông báo sang Portal Hội viên & Quầy Lễ tân
+       */
+      completeOneTouch(orderId) {
+        const order = this.orders.find(o => o.orderId === orderId);
+        if (!order) return;
+
+        order.status = 'READY';
+        order.readyAt = new Date().toLocaleTimeString('vi-VN');
+
+        // Lưu vào localStorage
+        localStorage.setItem('fitlab_orders', JSON.stringify(this.orders));
+
+        // Phát âm thanh Ding 1-chạm
+        this.playDingSound();
+
+        // Hiển thị toast thông báo
+        this.showToast(`✅ ĐÃ HOÀN TẤT ĐÓNG KHAY #${orderId} - RA QUẦY THÀNH CÔNG!`);
+
+        // Re-render danh sách khay
+        this.renderQueue();
+      },
+
+      /**
+       * Hoàn tác nếu bấm nhầm
+       */
+      undoStatus(orderId) {
+        const order = this.orders.find(o => o.orderId === orderId);
+        if (order) {
+          order.status = 'COOKING';
+          localStorage.setItem('fitlab_orders', JSON.stringify(this.orders));
+          this.renderQueue();
+          this.showToast(`Đã hoàn tác đơn #${orderId} về Đang chế biến.`);
+        }
+      },
+
+      renderQueue() {
+        const container = document.getElementById('platingQueueList');
+        container.innerHTML = '';
+
+        // Lọc đơn
+        const filtered = this.orders;
+        document.getElementById('queueCountBadge').innerText = `Tổng khay: ${filtered.length}`;
+
+        if (filtered.length === 0) {
+          container.innerHTML = `<div class="text-center text-slate-500 py-8">Chưa có đơn nào trong ca này.</div>`;
+          return;
+        }
+
+        filtered.forEach(order => {
+          const isReady = (order.status === 'READY' || order.status === 'COMPLETED');
+          const allergenText = Array.isArray(order.allergens) 
+            ? order.allergens.join(' & ') 
+            : (order.allergens || 'Không có dị ứng');
+
+          const chickenWeight = order.macros?.chicken || '165g';
+          const riceWeight = order.macros?.rice || '180g';
+          const veggieWeight = order.macros?.veggie || '120g';
+
+          const card = document.createElement('div');
+          card.className = `p-4 rounded-lg border-l-4 transition ${
+            isReady 
+              ? 'bg-slate-900/60 border-green-500 opacity-75' 
+              : 'bg-slate-900 border-red-500'
+          }`;
+
+          card.innerHTML = `
+            <div class="flex justify-between items-start mb-2">
+              <div>
+                <span class="font-bold text-lg text-white">#${order.orderId} - Hội viên: ${order.customerName}</span>
+                <span class="ml-2 bg-blue-900 text-blue-200 text-xs px-2 py-0.5 rounded">${order.takeaway || 'Dùng tại chỗ'}</span>
+              </div>
+              <span class="${
+                isReady 
+                  ? 'bg-green-500/20 text-green-300' 
+                  : 'bg-amber-500/20 text-amber-300'
+              } text-xs px-2 py-1 rounded font-bold">
+                ${isReady ? '✅ Đã ra quầy' : 'Đang chế biến'}
+              </span>
+            </div>
+
+            <!-- Nhãn cảnh báo đỏ loại trừ dị ứng (HĐ 6) -->
+            <div class="bg-red-950 border border-red-600 text-red-200 px-3 py-2 rounded text-xs font-bold mb-3 flex items-center space-x-2">
+              <span>⚠️</span>
+              <span>CẢNH BÁO DỊ ỨNG: ${allergenText.toUpperCase()}</span>
+            </div>
+
+            <!-- Định lượng gram thực tế cần gắp lên cân điện tử (HĐ 5) -->
+            <div class="grid grid-cols-3 gap-2 text-xs bg-slate-800 p-3 rounded mb-3 border border-slate-700">
+              <div>🍗 Ức gà chín: <b class="text-sm text-amber-300 font-mono">${chickenWeight}</b></div>
+              <div>🍚 Cơm gạo lứt: <b class="text-sm text-amber-300 font-mono">${riceWeight}</b></div>
+              <div>🥦 Bông cải xanh: <b class="text-sm text-amber-300 font-mono">${veggieWeight}</b></div>
+            </div>
+
+            <!-- NÚT 1-CHẠM HĐ 7 (Do Thu Lan code logic) -->
+            ${
+              isReady 
+                ? `
+                  <div class="flex items-center justify-between bg-green-950/60 border border-green-700/50 p-2.5 rounded-lg text-xs">
+                    <span class="text-green-300 font-semibold">
+                      <i class="fa-solid fa-check-double mr-1"></i> Đã hoàn tất đóng khay lúc ${order.readyAt || 'vừa xong'}
+                    </span>
+                    <button onclick="KDSManager.undoStatus('${order.orderId}')" class="text-slate-400 hover:text-white underline text-[11px]">
+                      Hoàn tác
+                    </button>
+                  </div>
+                `
+                : `
+                  <button onclick="KDSManager.completeOneTouch('${order.orderId}')"
+                          class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-lg shadow transition flex items-center justify-center space-x-2 text-sm">
+                    <i class="fa-solid fa-circle-check text-base"></i>
+                    <span>✅ HOÀN TẤT ĐÓNG KHAY – RA QUẦY (1 Chạm)</span>
+                  </button>
+                `
+            }
+          `;
+
+          container.appendChild(card);
+        });
+      },
+
+      playDingSound() {
+        try {
+          const ctx = new (window.AudioContext || window.webkitAudioContext)();
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+          osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1); // E5
+          osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2); // G5
+          gain.gain.setValueAtTime(0.4, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.9);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.9);
+        } catch(e) {}
+      },
+
+      playBeepSound() {
+        try {
+          const ctx = new (window.AudioContext || window.webkitAudioContext)();
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(440, ctx.currentTime);
+          gain.gain.setValueAtTime(0.3, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.4);
+        } catch(e) {}
+      },
+
+      showToast(msg) {
+        const toast = document.getElementById('kdsToast');
+        document.getElementById('kdsToastText').innerText = msg;
+        toast.classList.remove('translate-y-20', 'opacity-0');
+        setTimeout(() => {
+          toast.classList.add('translate-y-20', 'opacity-0');
+        }, 3500);
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      KDSManager.init();
+    });
+  </script>
 </body>
 </html>
