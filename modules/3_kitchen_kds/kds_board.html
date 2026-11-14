@@ -2,99 +2,148 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Màn hình KDS Bếp - FitLab Meal Prep</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Màn hình KDS Bếp - FitLab Kitchen Display System</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-slate-900 text-white p-6 font-sans min-h-screen">
-  <!-- Thanh trạng thái KDS -->
-  <div class="flex justify-between items-center border-b border-slate-700 pb-4 mb-6">
+<body class="bg-slate-950 text-white p-5 font-sans min-h-screen">
+
+  <!-- THANH ĐIỀU HƯỚNG & TRẠNG THÁI KDS THỰC TẾ -->
+  <header class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-800 pb-4 mb-6 gap-4">
     <div>
-      <div class="flex items-center space-x-3">
-        <a href="../../index.html" class="text-amber-400 text-sm hover:underline">← Quay lại Trang điều hướng tổng</a>
-        <span class="text-xs bg-slate-800 text-slate-400 px-2 py-0.5 rounded border border-slate-700">
-          KDS Kitchen Display System
+      <div class="flex items-center space-x-3 mb-1">
+        <a href="../../index.html" class="text-xs bg-slate-800 hover:bg-slate-700 text-amber-400 px-2.5 py-1 rounded transition flex items-center">
+          <i class="fa-solid fa-arrow-left mr-1.5"></i> Trung tâm điều hành
+        </a>
+        <span class="text-xs bg-slate-900 text-slate-400 px-2.5 py-1 rounded border border-slate-800">
+          Trạm KDS Bếp Trung Tâm v2.4
         </span>
       </div>
-      <h1 class="text-2xl font-bold mt-1">👨‍🍳 MÀN HÌNH ĐIỀU PHỐI CHẾ BIẾN BẾP (KDS) - MỤC 2.1.5</h1>
+      <h1 class="text-2xl font-bold tracking-tight text-white flex items-center">
+        <span class="text-amber-400 mr-2">👨‍🍳</span> BẢNG ĐIỀU PHỐI CHẾ BIẾN BẾP (KITCHEN DISPLAY)
+      </h1>
     </div>
-    <div class="flex items-center gap-3">
-      <span id="wsStatus" class="bg-green-700 px-3 py-1.5 rounded text-sm font-semibold flex items-center">
-        <span class="w-2 h-2 rounded-full bg-white animate-pulse mr-2"></span>
-        WebSocket Realtime: Đang kết nối
-      </span>
-      <select id="shiftFilter" onchange="KDSManager.changeShift()" class="bg-slate-800 border border-slate-600 px-3 py-1.5 rounded text-sm text-white focus:outline-none">
-        <option value="17:30 - 18:00">Ca nhận: 17:30 - 18:00 (Hôm nay)</option>
-        <option value="19:00 - 19:30">Ca nhận: 19:00 - 19:30 (Hôm nay)</option>
-        <option value="11:30 - 12:30">Ca nhận: 11:30 - 12:30 (Hôm nay)</option>
-      </select>
-    </div>
-  </div>
 
-  <!-- Chia 2 cột chuẩn nghiệp vụ 2.1.5 -->
-  <div class="grid grid-cols-12 gap-6">
-    <!-- CỘT TRÁI: BẢNG TỔNG HỢP MẺ NẤU (BATCH SUMMARY) -->
-    <div class="col-span-12 lg:col-span-5 bg-slate-800 p-5 rounded-xl border border-slate-700 flex flex-col justify-between">
-      <div>
-        <h2 class="text-lg font-bold text-amber-400 mb-2">1. BẢNG TỔNG HỢP MẺ NẤU THEO CA (HĐ 2 - HĐ 4)</h2>
-        <p class="text-xs text-slate-400 mb-4">Gom tổng nguyên liệu của các đơn trong ca để nấu mẻ lớn</p>
-        
-        <!-- Bảng tổng định lượng mẻ nấu -->
-        <table class="w-full text-sm text-left mb-6">
-          <thead class="bg-slate-700 text-slate-300">
-            <tr>
-              <th class="p-2">Thành phần chế biến</th>
-              <th class="p-2">Tổng lượng thô</th>
-              <th class="p-2">Tổng lượng chín</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-slate-700" id="batchSummaryTable">
-            <tr><td class="p-2">Ức gà áp chảo thảo mộc</td><td class="p-2">3.200 g</td><td class="p-2 font-bold text-amber-300">2.560 g</td></tr>
-            <tr><td class="p-2">Cá hồi Nauy nướng</td><td class="p-2">1.500 g</td><td class="p-2 font-bold text-amber-300">1.275 g</td></tr>
-            <tr><td class="p-2">Cơm gạo lứt hữu cơ</td><td class="p-2">1.800 g</td><td class="p-2 font-bold text-amber-300">4.140 g</td></tr>
-          </tbody>
-        </table>
+    <!-- CÁC THÔNG SỐ VẬN HÀNH BẾP -->
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-lg text-xs flex items-center text-slate-300">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse mr-2"></span>
+        <span class="font-semibold text-emerald-400">WebSocket Live</span>
+        <span class="mx-2 text-slate-600">|</span>
+        <span id="currentTimeDisplay" class="font-mono text-slate-300">17:35:10</span>
       </div>
 
-      <!-- NÚT BẤM HĐ 4: BẮT ĐẦU CA NẤU -->
+      <div class="flex items-center space-x-2">
+        <label class="text-xs text-slate-400">Ca phục vụ:</label>
+        <select id="shiftFilter" onchange="KDSManager.changeShift()" class="bg-slate-900 border border-slate-700 text-amber-300 font-semibold px-3 py-1.5 rounded-lg text-xs focus:ring-1 focus:ring-amber-400 focus:outline-none">
+          <option value="17:30 - 18:00">Ca Tối 1: 17:30 - 18:00 (Hôm nay)</option>
+          <option value="19:00 - 19:30">Ca Tối 2: 19:00 - 19:30 (Hôm nay)</option>
+          <option value="11:30 - 12:30">Ca Trưa: 11:30 - 12:30 (Hôm nay)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <!-- BỐ CỤC 2 CỘT CHUẨN TRẠM BẾP CÔNG NGHIỆP -->
+  <main class="grid grid-cols-12 gap-6">
+
+    <!-- CỘT 1 (5 CỘT): TRẠM NẤU MẺ LỚN (BATCH COOKING STATION) -->
+    <section class="col-span-12 lg:col-span-5 bg-slate-900 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between shadow-xl">
       <div>
+        <div class="flex justify-between items-center mb-1">
+          <h2 class="text-base font-bold text-amber-400 flex items-center">
+            <i class="fa-solid fa-layer-group mr-2"></i> 1. TỔNG HỢP MẺ NẤU THEO CA
+          </h2>
+          <span class="text-[11px] bg-amber-500/10 text-amber-300 px-2 py-0.5 rounded border border-amber-500/20 font-semibold">
+            Gom đơn tự động
+          </span>
+        </div>
+        <p class="text-xs text-slate-400 mb-4">
+          Tổng hợp khối lượng nguyên liệu từ tất cả đơn trong ca để đầu bếp sơ chế và nấu mẻ lớn
+        </p>
+        
+        <!-- BẢNG ĐỊNH LƯỢNG NGUYÊN LIỆU GOM THEO CA -->
+        <div class="overflow-hidden rounded-xl border border-slate-800 mb-6">
+          <table class="w-full text-xs text-left">
+            <thead class="bg-slate-800/80 text-slate-300 uppercase tracking-wider font-semibold">
+              <tr>
+                <th class="p-3">Nguyên liệu / Món chính</th>
+                <th class="p-3 text-center">Khối lượng thô</th>
+                <th class="p-3 text-right">Khối lượng chín</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800 bg-slate-900/50" id="batchSummaryTable">
+              <tr class="hover:bg-slate-800/40">
+                <td class="p-3 font-semibold text-slate-200">🍗 Ức gà áp chảo thảo mộc</td>
+                <td class="p-3 text-center text-slate-400 font-mono">3,200 g</td>
+                <td class="p-3 text-right font-bold text-amber-400 font-mono text-sm">2,560 g</td>
+              </tr>
+              <tr class="hover:bg-slate-800/40">
+                <td class="p-3 font-semibold text-slate-200">🐟 Cá hồi Nauy nướng sốt cam</td>
+                <td class="p-3 text-center text-slate-400 font-mono">1,500 g</td>
+                <td class="p-3 text-right font-bold text-amber-400 font-mono text-sm">1,275 g</td>
+              </tr>
+              <tr class="hover:bg-slate-800/40">
+                <td class="p-3 font-semibold text-slate-200">🍚 Cơm gạo lứt hữu cơ</td>
+                <td class="p-3 text-center text-slate-400 font-mono">1,800 g</td>
+                <td class="p-3 text-right font-bold text-amber-400 font-mono text-sm">4,140 g</td>
+              </tr>
+              <tr class="hover:bg-slate-800/40">
+                <td class="p-3 font-semibold text-slate-200">🥦 Bông cải xanh luộc giữ giòn</td>
+                <td class="p-3 text-center text-slate-400 font-mono">2,100 g</td>
+                <td class="p-3 text-right font-bold text-amber-400 font-mono text-sm">1,950 g</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- NÚT BẮT ĐẦU CA NẤU THỰC TẾ -->
+      <div class="pt-4 border-t border-slate-800">
         <button id="btnStartBatch" onclick="KDSManager.startBatchCooking()" 
-                class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-3.5 rounded-lg shadow-lg flex items-center justify-center space-x-2 transition text-base">
-          <i class="fa-solid fa-fire"></i>
-          <span id="startBatchText">🔥 BẮT ĐẦU CA NẤU [17:30] (Chuyển sang Đang chế biến)</span>
+                class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-slate-950 font-black py-4 px-4 rounded-xl shadow-lg flex items-center justify-center space-x-2 transition text-sm uppercase tracking-wide">
+          <i class="fa-solid fa-fire text-lg"></i>
+          <span id="startBatchText">Bắt Đầu Nấu Ca [17:30] & Khóa Đổi Món</span>
         </button>
         <p class="text-[11px] text-slate-400 mt-2 text-center">
-          * Khi bấm: Khóa quyền hủy/dời ca ở quầy lễ tân & Portal hội viên.
+          * Thao tác này sẽ chuyển toàn bộ đơn hàng sang trạng thái "Đang chế biến" và đồng bộ tới ứng dụng Hội viên.
         </p>
       </div>
-    </div>
+    </section>
 
-    <!-- CỘT PHẢI: HÀNG THẺ SUẤT ĂN CHI TIẾT (PLATING QUEUE) -->
-    <div class="col-span-12 lg:col-span-7 bg-slate-800 p-5 rounded-xl border border-slate-700">
-      <div class="flex justify-between items-center mb-2">
-        <h2 class="text-lg font-bold text-green-400">2. HÀNG THẺ CÂN CHIA KHAY CÁ NHÂN (HĐ 5 - HĐ 8)</h2>
-        <span class="text-xs bg-slate-700 text-slate-300 px-2.5 py-1 rounded font-semibold" id="queueCountBadge">
+    <!-- CỘT 2 (7 CỘT): TRẠM CÂN CHIA KHAY THEO GRAM CÁ NHÂN (PORTIONING & PLATING STATION) -->
+    <section class="col-span-12 lg:col-span-7 bg-slate-900 p-5 rounded-2xl border border-slate-800 shadow-xl space-y-4">
+      <div class="flex justify-between items-center">
+        <div>
+          <h2 class="text-base font-bold text-emerald-400 flex items-center">
+            <i class="fa-solid fa-utensils mr-2"></i> 2. HÀNG ĐỢI ĐÓNG KHAY CÁ NHÂN HÓA
+          </h2>
+          <p class="text-xs text-slate-400 mt-0.5">Đặt khay lên cân điện tử, chia chính xác số gram chín theo số đo InBody</p>
+        </div>
+        <span class="text-xs bg-slate-800 border border-slate-700 text-slate-300 px-3 py-1 rounded-full font-semibold" id="queueCountBadge">
           Đang phục vụ: 1 khay
         </span>
       </div>
-      <p class="text-xs text-slate-400 mb-4">Đặt khay lên cân điện tử, gắp đúng số gram chín và kiểm tra nhãn dị ứng đỏ</p>
 
-      <!-- Hàng đợi thẻ đơn (Render động theo dữ liệu đơn hàng) -->
-      <div id="platingQueueList" class="space-y-4">
-        <!-- Render thẻ đơn -->
+      <!-- DANH SÁCH THẺ ĐƠN HÀNG THỰC TẾ -->
+      <div id="platingQueueList" class="space-y-4 max-h-[620px] overflow-y-auto pr-1">
+        <!-- Render động danh sách khay suất ăn -->
       </div>
-    </div>
-  </div>
+    </section>
+
+  </main>
 
   <!-- TOAST BÁO HIỆU THỜI GIAN THỰC -->
-  <div id="kdsToast" class="fixed bottom-6 right-6 bg-amber-500 text-slate-950 px-5 py-3 rounded-xl font-bold text-sm shadow-2xl flex items-center space-x-2 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+  <div id="kdsToast" class="fixed bottom-6 right-6 bg-emerald-500 text-slate-950 px-5 py-3.5 rounded-xl font-bold text-sm shadow-2xl flex items-center space-x-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
     <i class="fa-solid fa-bell text-lg"></i>
     <span id="kdsToastText">Thông báo KDS</span>
   </div>
 
   <script>
     /**
-     * MODULE 3: KITCHEN DISPLAY SYSTEM (KDS) LOGIC
+     * FITLAB KITCHEN DISPLAY SYSTEM (KDS) ENGINE
+     * Bếp điều phối mẻ nấu & Chuyển trạng thái 1-chạm hoàn tất đóng khay
      */
     const KDSManager = {
       orders: [],
@@ -104,12 +153,21 @@
       init() {
         this.loadOrders();
         this.renderQueue();
+        this.startClock();
+      },
+
+      startClock() {
+        const update = () => {
+          const now = new Date();
+          document.getElementById('currentTimeDisplay').innerText = now.toLocaleTimeString('vi-VN');
+        };
+        update();
+        setInterval(update, 1000);
       },
 
       loadOrders() {
         let savedOrders = JSON.parse(localStorage.getItem('fitlab_orders') || '[]');
         if (savedOrders.length === 0) {
-          // Tạo đơn mặc định nếu chưa có đơn nào
           savedOrders = [
             {
               orderId: 'ORD-1024',
@@ -118,7 +176,7 @@
               shift: '17:30 - 18:00',
               takeaway: 'Mang đi (Hộp giữ nhiệt)',
               status: 'COOKING',
-              allergens: ['DỊ ỨNG ĐẬU PHỘNG & HẢI SẢN CÓ VỎ (Tuyệt đối không dùng sốt lạc)'],
+              allergens: ['Dị ứng Đậu phộng', 'Dị ứng Hải sản có vỏ'],
               macros: {
                 chicken: '165g',
                 rice: '180g',
@@ -134,13 +192,12 @@
       changeShift() {
         this.currentShift = document.getElementById('shiftFilter').value;
         const btnText = document.getElementById('startBatchText');
-        btnText.innerText = `🔥 BẮT ĐẦU CA NẤU [${this.currentShift.split(' - ')[0]}] (Chuyển sang Đang chế biến)`;
+        btnText.innerText = `Bắt Đầu Nấu Ca [${this.currentShift.split(' - ')[0]}] & Khóa Đổi Món`;
         this.renderQueue();
       },
 
       /**
-       * HÀNH ĐỘNG 4 (HĐ 4): BẮT ĐẦU CA NẤU
-       * Chuyển tất cả đơn trong ca từ QUEUED sang COOKING
+       * BẮT ĐẦU CA NẤU (Chuyển toàn bộ đơn trong ca sang COOKING)
        */
       startBatchCooking() {
         this.isCookingBatchStarted = true;
@@ -156,49 +213,44 @@
         localStorage.setItem('fitlab_orders', JSON.stringify(this.orders));
         
         const btn = document.getElementById('btnStartBatch');
-        btn.className = 'w-full bg-green-700 text-white font-bold py-3.5 rounded-lg shadow-lg flex items-center justify-center space-x-2 transition text-base';
-        document.getElementById('startBatchText').innerText = `🔥 CA NẤU [${this.currentShift.split(' - ')[0]}] ĐANG DIỄN RA (ĐÃ KHÓA SỬA/HỦY)`;
+        btn.className = 'w-full bg-emerald-600 text-white font-black py-4 px-4 rounded-xl shadow-lg flex items-center justify-center space-x-2 transition text-sm uppercase tracking-wide';
+        document.getElementById('startBatchText').innerText = `🔥 CA NẤU [${this.currentShift.split(' - ')[0]}] ĐANG DIỄN RA (ĐÃ KHÓA ĐỔI MÓN)`;
 
         this.playBeepSound();
-        this.showToast(`🔥 Đã bắt đầu ca nấu! Khóa quyền sửa/hủy và chuyển ${count || 1} đơn sang ĐANG CHẾ BIẾN.`);
+        this.showToast(`🔥 Đã bắt đầu ca nấu! Khóa quyền sửa món và chuyển ${count || 1} đơn sang ĐANG CHẾ BIẾN.`);
         this.renderQueue();
       },
 
       /**
-       * HÀNH ĐỘNG 7 (HĐ 7): NÚT CHUYỂN TRẠNG THÁI 1-CHẠM
-       * Bấm 1 chạm: Hoàn tất đóng khay -> Chuyển sang RA QUẦY (READY)
-       * Phát âm thanh chuông bếp và thông báo sang Portal Hội viên & Quầy Lễ tân
+       * NÚT CHUYỂN TRẠNG THÁI 1-CHẠM: HOÀN TẤT ĐÓNG KHAY - RA QUẦY
        */
       completeOneTouch(orderId) {
         const order = this.orders.find(o => o.orderId === orderId);
         if (!order) return;
 
         order.status = 'READY';
-        order.readyAt = new Date().toLocaleTimeString('vi-VN');
+        order.readyAt = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
 
-        // Lưu vào localStorage
+        // Đồng bộ dữ liệu
         localStorage.setItem('fitlab_orders', JSON.stringify(this.orders));
 
-        // Phát âm thanh Ding 1-chạm
+        // Âm thanh chuông báo chuẩn KDS
         this.playDingSound();
 
-        // Hiển thị toast thông báo
-        this.showToast(`✅ ĐÃ HOÀN TẤT ĐÓNG KHAY #${orderId} - RA QUẦY THÀNH CÔNG!`);
+        // Toast thông báo
+        this.showToast(`✅ ĐÃ RA QUẦY KHAY ĂN #${orderId} THÀNH CÔNG!`);
 
-        // Re-render danh sách khay
+        // Re-render
         this.renderQueue();
       },
 
-      /**
-       * Hoàn tác nếu bấm nhầm
-       */
       undoStatus(orderId) {
         const order = this.orders.find(o => o.orderId === orderId);
         if (order) {
           order.status = 'COOKING';
           localStorage.setItem('fitlab_orders', JSON.stringify(this.orders));
           this.renderQueue();
-          this.showToast(`Đã hoàn tác đơn #${orderId} về Đang chế biến.`);
+          this.showToast(`Đã chuyển lại khay #${orderId} về trạng thái đang chế biến.`);
         }
       },
 
@@ -206,12 +258,11 @@
         const container = document.getElementById('platingQueueList');
         container.innerHTML = '';
 
-        // Lọc đơn
         const filtered = this.orders;
         document.getElementById('queueCountBadge').innerText = `Tổng khay: ${filtered.length}`;
 
         if (filtered.length === 0) {
-          container.innerHTML = `<div class="text-center text-slate-500 py-8">Chưa có đơn nào trong ca này.</div>`;
+          container.innerHTML = `<div class="text-center text-slate-500 py-12">Không có đơn hàng nào trong ca này.</div>`;
           return;
         }
 
@@ -226,47 +277,56 @@
           const veggieWeight = order.macros?.veggie || '120g';
 
           const card = document.createElement('div');
-          card.className = `p-4 rounded-lg border-l-4 transition ${
+          card.className = `p-4 rounded-xl border-l-4 transition ${
             isReady 
-              ? 'bg-slate-900/60 border-green-500 opacity-75' 
-              : 'bg-slate-900 border-red-500'
-          }`;
+              ? 'bg-slate-900/60 border-emerald-500 opacity-80' 
+              : 'bg-slate-900 border-amber-500 shadow-md'
+          } border border-slate-800`;
 
           card.innerHTML = `
             <div class="flex justify-between items-start mb-2">
               <div>
-                <span class="font-bold text-lg text-white">#${order.orderId} - Hội viên: ${order.customerName}</span>
-                <span class="ml-2 bg-blue-900 text-blue-200 text-xs px-2 py-0.5 rounded">${order.takeaway || 'Dùng tại chỗ'}</span>
+                <span class="font-bold text-base text-white">#${order.orderId} - Khách: ${order.customerName}</span>
+                <span class="ml-2 bg-slate-800 text-slate-300 text-xs px-2.5 py-0.5 rounded border border-slate-700">${order.takeaway || 'Dùng tại chỗ'}</span>
               </div>
               <span class="${
                 isReady 
-                  ? 'bg-green-500/20 text-green-300' 
-                  : 'bg-amber-500/20 text-amber-300'
-              } text-xs px-2 py-1 rounded font-bold">
-                ${isReady ? '✅ Đã ra quầy' : 'Đang chế biến'}
+                  ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' 
+                  : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+              } text-xs px-2.5 py-0.5 rounded-full font-bold">
+                ${isReady ? '✅ Đã ra quầy Lounge' : 'Đang chế biến'}
               </span>
             </div>
 
-            <!-- Nhãn cảnh báo đỏ loại trừ dị ứng (HĐ 6) -->
-            <div class="bg-red-950 border border-red-600 text-red-200 px-3 py-2 rounded text-xs font-bold mb-3 flex items-center space-x-2">
-              <span>⚠️</span>
-              <span>CẢNH BÁO DỊ ỨNG: ${allergenText.toUpperCase()}</span>
+            <!-- NHÃN CẢNH BÁO AN TOÀN DỊ ỨNG -->
+            <div class="bg-red-950/80 border border-red-600/70 text-red-200 px-3 py-1.5 rounded-lg text-xs font-bold mb-3 flex items-center space-x-2">
+              <i class="fa-solid fa-triangle-exclamation text-red-400"></i>
+              <span>CẢNH BÁO AN TOÀN BẾP: ${allergenText.toUpperCase()}</span>
             </div>
 
-            <!-- Định lượng gram thực tế cần gắp lên cân điện tử (HĐ 5) -->
-            <div class="grid grid-cols-3 gap-2 text-xs bg-slate-800 p-3 rounded mb-3 border border-slate-700">
-              <div>🍗 Ức gà chín: <b class="text-sm text-amber-300 font-mono">${chickenWeight}</b></div>
-              <div>🍚 Cơm gạo lứt: <b class="text-sm text-amber-300 font-mono">${riceWeight}</b></div>
-              <div>🥦 Bông cải xanh: <b class="text-sm text-amber-300 font-mono">${veggieWeight}</b></div>
+            <!-- BẢNG ĐỊNH LƯỢNG GRAM THỰC TẾ TRÊN CÂN ĐIỆN TỬ -->
+            <div class="grid grid-cols-3 gap-2 text-xs bg-slate-950 p-3 rounded-lg mb-3 border border-slate-800">
+              <div class="text-center p-1 bg-slate-900 rounded">
+                <div class="text-slate-400 text-[10px]">Ức gà chín</div>
+                <div class="text-base text-amber-300 font-bold font-mono">${chickenWeight}</div>
+              </div>
+              <div class="text-center p-1 bg-slate-900 rounded">
+                <div class="text-slate-400 text-[10px]">Cơm gạo lứt</div>
+                <div class="text-base text-amber-300 font-bold font-mono">${riceWeight}</div>
+              </div>
+              <div class="text-center p-1 bg-slate-900 rounded">
+                <div class="text-slate-400 text-[10px]">Bông cải xanh</div>
+                <div class="text-base text-amber-300 font-bold font-mono">${veggieWeight}</div>
+              </div>
             </div>
 
-            <!-- NÚT 1-CHẠM HĐ 7: HOÀN TẤT ĐÓNG KHAY -->
+            <!-- NÚT 1-CHẠM RA QUẦY -->
             ${
               isReady 
                 ? `
-                  <div class="flex items-center justify-between bg-green-950/60 border border-green-700/50 p-2.5 rounded-lg text-xs">
-                    <span class="text-green-300 font-semibold">
-                      <i class="fa-solid fa-check-double mr-1"></i> Đã hoàn tất đóng khay lúc ${order.readyAt || 'vừa xong'}
+                  <div class="flex items-center justify-between bg-emerald-950/60 border border-emerald-800/60 p-2.5 rounded-lg text-xs">
+                    <span class="text-emerald-300 font-semibold flex items-center">
+                      <i class="fa-solid fa-check-double mr-1.5"></i> Đã hoàn tất đóng khay lúc ${order.readyAt || '17:42'}
                     </span>
                     <button onclick="KDSManager.undoStatus('${order.orderId}')" class="text-slate-400 hover:text-white underline text-[11px]">
                       Hoàn tác
@@ -275,9 +335,9 @@
                 `
                 : `
                   <button onclick="KDSManager.completeOneTouch('${order.orderId}')"
-                          class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-lg shadow transition flex items-center justify-center space-x-2 text-sm">
+                          class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl shadow-lg transition flex items-center justify-center space-x-2 text-xs tracking-wider uppercase">
                     <i class="fa-solid fa-circle-check text-base"></i>
-                    <span>✅ HOÀN TẤT ĐÓNG KHAY – RA QUẦY (1 Chạm)</span>
+                    <span>Hoàn Tất Đóng Khay – Ra Quầy (1 Chạm)</span>
                   </button>
                 `
             }
@@ -293,9 +353,9 @@
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();
           osc.type = 'triangle';
-          osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
-          osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1); // E5
-          osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2); // G5
+          osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+          osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1);
+          osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2);
           gain.gain.setValueAtTime(0.4, ctx.currentTime);
           gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.9);
           osc.connect(gain);

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lịch Đặt Suất Ăn & Cut-off 20h00 - FitLab Member</title>
+  <title>Lịch Đặt Suất Ăn Tươi Theo Ca - FitLab Member Portal</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script>
@@ -33,7 +33,7 @@
     <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
       <div class="flex items-center space-x-3">
         <a href="../../index.html" class="text-xs bg-emerald-800 hover:bg-emerald-700 px-3 py-1.5 rounded-lg text-emerald-200 transition">
-          <i class="fa-solid fa-arrow-left mr-1"></i> Trang tổng
+          <i class="fa-solid fa-arrow-left mr-1"></i> Trang chủ
         </a>
         <div class="flex items-center space-x-2">
           <span class="text-2xl">🥗</span>
@@ -47,7 +47,7 @@
           <i class="fa-solid fa-weight-scale mr-1.5"></i> Chỉ số InBody & Dị ứng
         </a>
         <a href="preorder_calendar.html" class="bg-emerald-800 text-white font-bold px-3 py-2 rounded-lg">
-          <i class="fa-solid fa-calendar-days mr-1.5 text-emerald-300"></i> Đặt lịch suất ăn (Cut-off 20h)
+          <i class="fa-solid fa-calendar-days mr-1.5 text-emerald-300"></i> Đặt lịch suất ăn
         </a>
         <a href="order_qr_status.html" class="text-emerald-200 hover:bg-emerald-800/60 px-3 py-2 rounded-lg transition">
           <i class="fa-solid fa-qrcode mr-1.5"></i> QR & Tiến độ suất ăn
@@ -69,37 +69,37 @@
   <!-- BODY CONTENT -->
   <main class="max-w-6xl mx-auto p-4 md:p-6 space-y-6">
 
-    <!-- BANNER CUT-OFF 20H00 & ĐỒNG HỒ ĐẾM NGƯỢC -->
+    <!-- BANNER CHÍNH SÁCH BẾP TƯƠI SỐNG (CUT-OFF 20H00) & ĐỒNG HỒ ĐẾM NGƯỢC -->
     <div class="bg-gradient-to-r from-emerald-900 via-green-900 to-emerald-950 text-white p-5 md:p-6 rounded-2xl shadow-lg border border-emerald-700/50 flex flex-col md:flex-row items-center justify-between gap-4">
       <div>
         <div class="flex items-center space-x-2 text-amber-300 text-xs font-bold uppercase tracking-wider mb-1">
-          <i class="fa-solid fa-clock"></i>
-          <span>QUY TẮC NGHIỆP VỤ R18 - R24: KIỂM SOÁT CUT-OFF 20H00</span>
+          <i class="fa-solid fa-shield-halved"></i>
+          <span>CAM KẾT NGUYÊN LIỆU TƯƠI SỐNG 100% TRONG NGÀY</span>
         </div>
         <h1 class="text-xl md:text-2xl font-bold">Lịch Đặt Suất Ăn Tươi Theo Ca</h1>
-        <p class="text-xs text-emerald-200 mt-1 max-w-2xl">
-          Để Bếp gom tổng mẻ nguyên liệu tươi sạch và sơ chế trong đêm, tất cả suất ăn của ngày mai phải được xác nhận trước <b>20h00 hôm nay</b>. Sau 20h00, hệ thống tự động khóa đơn của ngày mai.
+        <p class="text-xs text-emerald-200 mt-1 max-w-2xl leading-relaxed">
+          Đầu bếp FitLab tiếp nhận và gom đơn lúc <b>20:00 mỗi tối</b> để nhập thực phẩm tươi sống trong đêm và cân chia gram chính xác theo số đo InBody của bạn. Sau 20:00, đơn ăn ngày mai sẽ tự động chốt để bắt đầu sơ chế.
         </p>
       </div>
 
-      <!-- Khối đồng hồ đếm ngược & Công cụ giả lập giờ -->
+      <!-- Khối đồng hồ đếm ngược -->
       <div class="flex flex-col items-center bg-black/30 p-3.5 rounded-xl border border-emerald-500/30 backdrop-blur-sm min-w-[260px]">
-        <span class="text-[11px] text-emerald-300 mb-1">Hạn chót Cut-off hôm nay:</span>
+        <span class="text-[11px] text-emerald-300 mb-1">Thời gian chốt món ngày mai:</span>
         <div class="text-2xl font-black tracking-wider text-amber-300 font-mono" id="cutoffCountdown">
           01:23:45
         </div>
-        <span class="text-[10px] text-emerald-200 mt-0.5" id="cutoffStatusText">🟢 Đang mở đặt cho ngày mai</span>
+        <span class="text-[10px] text-emerald-200 mt-0.5" id="cutoffStatusText">🟢 Đang mở đặt món cho ngày mai</span>
 
-        <!-- Nút Test giả lập giờ để báo cáo/chấm điểm -->
+        <!-- Bộ chuyển đổi mô phỏng thời gian -->
         <div class="mt-2.5 pt-2 border-t border-emerald-700/60 w-full flex justify-between gap-1 text-[10px]">
-          <button onclick="PreorderApp.simulateTime('before')" class="flex-1 bg-emerald-700 hover:bg-emerald-600 px-1.5 py-1 rounded text-white font-medium" title="Giả lập lúc 18:30 chiều">
-            Giả lập 18:30 (Mở)
+          <button onclick="PreorderApp.simulateTime('before')" class="flex-1 bg-emerald-700 hover:bg-emerald-600 px-1.5 py-1 rounded text-white font-medium" title="Mô phỏng trước 20:00">
+            Giờ chiều (18:30)
           </button>
-          <button onclick="PreorderApp.simulateTime('after')" class="flex-1 bg-rose-700 hover:bg-rose-600 px-1.5 py-1 rounded text-white font-medium" title="Giả lập lúc 20:15 tối">
-            Giả lập 20:15 (Khóa)
+          <button onclick="PreorderApp.simulateTime('after')" class="flex-1 bg-rose-700 hover:bg-rose-600 px-1.5 py-1 rounded text-white font-medium" title="Mô phỏng sau 20:00">
+            Giờ tối (20:15)
           </button>
-          <button onclick="PreorderApp.simulateTime('real')" class="px-1.5 py-1 bg-stone-700 hover:bg-stone-600 rounded text-stone-300" title="Trở về giờ thật">
-            Giờ thật
+          <button onclick="PreorderApp.simulateTime('real')" class="px-1.5 py-1 bg-stone-700 hover:bg-stone-600 rounded text-stone-300" title="Giờ hệ thống">
+            Giờ thực
           </button>
         </div>
       </div>
@@ -111,14 +111,14 @@
       <!-- CỘT TRÁI (8 CỘT): CHỌN NGÀY, CA ĂN & MÓN ĂN -->
       <div class="lg:col-span-8 space-y-6">
 
-        <!-- BƯỚC 1: CHỌN NGÀY ĂN (CALENDAR CAROUSEL / 7 NGÀY TỚI) -->
+        <!-- BƯỚC 1: CHỌN NGÀY ĂN -->
         <div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-200 space-y-3">
           <div class="flex justify-between items-center">
             <h2 class="text-sm font-bold text-stone-900 flex items-center">
               <span class="w-6 h-6 bg-emerald-600 text-white rounded-md flex items-center justify-center text-xs mr-2">1</span>
               Chọn Ngày Nhận Suất Ăn
             </h2>
-            <span class="text-xs text-stone-500">Hiển thị 7 ngày tới</span>
+            <span class="text-xs text-stone-500">Lịch tuần tới</span>
           </div>
 
           <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2" id="datePickerContainer">
@@ -128,7 +128,7 @@
           <div id="dateLockAlert" class="hidden p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-xs flex items-center space-x-2">
             <i class="fa-solid fa-lock text-red-600 text-sm"></i>
             <div>
-              <b>ĐÃ KHÓA CUT-OFF:</b> Ngày mai đã qua 20h00. Bếp đã chốt tổng mẻ và đang sơ chế, bạn chỉ có thể đặt từ ngày kế tiếp.
+              <b>ĐÃ ĐÓNG ĐẶT MÓN NGÀY MAI:</b> Hệ thống đã qua mốc 20:00 tối. Bếp đã chốt đơn để nhập nguyên liệu tươi, bạn vui lòng chọn đặt từ các ngày tiếp theo.
             </div>
           </div>
         </div>
@@ -137,7 +137,7 @@
         <div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-200 space-y-3">
           <h2 class="text-sm font-bold text-stone-900 flex items-center">
             <span class="w-6 h-6 bg-emerald-600 text-white rounded-md flex items-center justify-center text-xs mr-2">2</span>
-            Chọn Ca Ăn & Hình Thức Nhận
+            Chọn Khung Giờ Nhận & Hình Thức Phục Vụ
           </h2>
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
@@ -147,7 +147,7 @@
                 <input type="radio" name="shift" value="17:30 - 18:00" checked class="text-emerald-600">
               </div>
               <div class="text-emerald-800 font-black text-sm">17:30 - 18:00</div>
-              <div class="text-[10px] text-stone-500 mt-1">Khuyên dùng sau buổi tập chiều</div>
+              <div class="text-[10px] text-stone-500 mt-1">Phục vụ sau buổi tập chiều</div>
             </label>
 
             <label class="p-3 border border-stone-200 hover:border-emerald-500 rounded-xl cursor-pointer flex flex-col justify-between shift-card" onclick="PreorderApp.selectShift('19:00 - 19:30', this)">
@@ -156,7 +156,7 @@
                 <input type="radio" name="shift" value="19:00 - 19:30" class="text-emerald-600">
               </div>
               <div class="text-stone-700 font-black text-sm">19:00 - 19:30</div>
-              <div class="text-[10px] text-stone-500 mt-1">Phù hợp buổi tập muộn</div>
+              <div class="text-[10px] text-stone-500 mt-1">Phù hợp buổi tập tối</div>
             </label>
 
             <label class="p-3 border border-stone-200 hover:border-emerald-500 rounded-xl cursor-pointer flex flex-col justify-between shift-card" onclick="PreorderApp.selectShift('11:30 - 12:30', this)">
@@ -165,20 +165,20 @@
                 <input type="radio" name="shift" value="11:30 - 12:30" class="text-emerald-600">
               </div>
               <div class="text-stone-700 font-black text-sm">11:30 - 12:30</div>
-              <div class="text-[10px] text-stone-500 mt-1">Nạp năng lượng phục hồi</div>
+              <div class="text-[10px] text-stone-500 mt-1">Bữa trưa phục hồi năng lượng</div>
             </label>
           </div>
 
           <!-- Hình thức nhận -->
           <div class="pt-2 flex items-center space-x-6 text-xs text-stone-700">
-            <span class="font-bold">Hình thức nhận:</span>
+            <span class="font-bold">Hình thức phục vụ:</span>
             <label class="flex items-center space-x-2 cursor-pointer">
               <input type="radio" name="takeaway" value="lounge" checked class="text-emerald-600">
               <span>🍽️ Dùng tại FitLab Lounge</span>
             </label>
             <label class="flex items-center space-x-2 cursor-pointer">
               <input type="radio" name="takeaway" value="box" class="text-emerald-600">
-              <span>🥡 Mang đi (Hộp giữ nhiệt cá nhân)</span>
+              <span>🥡 Mang đi (Hộp giữ nhiệt)</span>
             </label>
           </div>
         </div>
@@ -188,10 +188,11 @@
           <div class="flex justify-between items-center">
             <h2 class="text-sm font-bold text-stone-900 flex items-center">
               <span class="w-6 h-6 bg-emerald-600 text-white rounded-md flex items-center justify-center text-xs mr-2">3</span>
-              Chọn Món Thực Đơn Gợi Ý (Khớp InBody của bạn)
+              Chọn Món Thực Đơn Hôm Nay
             </h2>
-            <a href="menu_swap.html" class="text-xs text-blue-600 hover:underline">
-              Hoán đổi món ±5% (Tùy biến Macro) →
+            <a href="menu_swap.html" class="text-xs text-emerald-700 font-semibold hover:underline flex items-center">
+              <span>Tùy biến hoán đổi món ±5% Macro</span>
+              <i class="fa-solid fa-arrow-right ml-1"></i>
             </a>
           </div>
 
@@ -200,13 +201,13 @@
             <div class="border-2 border-emerald-600 rounded-xl p-3 bg-emerald-50/30 flex flex-col justify-between meal-card cursor-pointer" onclick="PreorderApp.selectMeal(1, this)">
               <div>
                 <div class="flex justify-between items-start mb-1">
-                  <span class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">Gợi ý #1</span>
+                  <span class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">Gợi ý tối ưu</span>
                   <input type="radio" name="mealChoice" value="1" checked class="text-emerald-600">
                 </div>
                 <h3 class="font-bold text-stone-900 text-xs mt-1">Ức gà áp chảo thảo mộc & Cơm gạo lứt</h3>
-                <p class="text-[11px] text-stone-500 mt-0.5">Ức gà 165g, Cơm lứt 180g, Bông cải 120g</p>
+                <p class="text-[11px] text-stone-500 mt-0.5">Ức gà 165g, Cơm lứt 180g, Bông cải xanh 120g</p>
               </div>
-              <div class="mt-3 pt-2 border-t border-emerald-200 text-[10px] flex justify-between font-semibold text-emerald-800">
+              <div class="mt-3 pt-2 border-t border-emerald-200 text-[10px] flex justify-between font-semibold text-emerald-800 font-mono">
                 <span>🔥 520 kcal</span>
                 <span>🍗 48g P</span>
                 <span>🍚 55g C</span>
@@ -220,10 +221,10 @@
                   <span class="bg-stone-200 text-stone-700 text-[10px] font-bold px-2 py-0.5 rounded">Món #2</span>
                   <input type="radio" name="mealChoice" value="2" class="text-emerald-600">
                 </div>
-                <h3 class="font-bold text-stone-900 text-xs mt-1">Cá hồi Nauy nướng sốt mè & Khoai lang tím</h3>
+                <h3 class="font-bold text-stone-900 text-xs mt-1">Cá hồi Nauy nướng sốt cam & Khoai lang tím</h3>
                 <p class="text-[11px] text-stone-500 mt-0.5">Cá hồi 150g, Khoai lang 160g, Măng tây 100g</p>
               </div>
-              <div class="mt-3 pt-2 border-t border-stone-100 text-[10px] flex justify-between font-semibold text-stone-600">
+              <div class="mt-3 pt-2 border-t border-stone-100 text-[10px] flex justify-between font-semibold text-stone-600 font-mono">
                 <span>🔥 560 kcal</span>
                 <span>🐟 42g P</span>
                 <span>🍠 48g C</span>
@@ -240,7 +241,7 @@
                 <h3 class="font-bold text-stone-900 text-xs mt-1">Thăn bò Úc áp chảo sốt tiêu đen & Quinoa</h3>
                 <p class="text-[11px] text-stone-500 mt-0.5">Bò 160g, Quinoa 150g, Đậu que luộc 100g</p>
               </div>
-              <div class="mt-3 pt-2 border-t border-stone-100 text-[10px] flex justify-between font-semibold text-stone-600">
+              <div class="mt-3 pt-2 border-t border-stone-100 text-[10px] flex justify-between font-semibold text-stone-600 font-mono">
                 <span>🔥 540 kcal</span>
                 <span>🥩 45g P</span>
                 <span>🌾 46g C</span>
@@ -251,21 +252,21 @@
 
       </div>
 
-      <!-- CỘT PHẢI (4 CỘT): TÓM TẮT ĐẶT TRƯỚC, GÓI ĂN & NÚT XÁC NHẬN -->
+      <!-- CỘT PHẢI (4 CỘT): TÓM TẮT ĐƠN, GÓI ĂN & NÚT XÁC NHẬN -->
       <div class="lg:col-span-4 space-y-6">
 
         <!-- THẺ THÔNG TIN GÓI ĂN HỘI VIÊN -->
         <div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-200 space-y-3">
           <div class="flex justify-between items-center">
-            <span class="text-xs font-bold text-stone-800">Gói suất ăn đang kích hoạt</span>
-            <span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-0.5 rounded-full">Đang dùng</span>
+            <span class="text-xs font-bold text-stone-800">Gói ăn kích hoạt</span>
+            <span class="bg-green-100 text-green-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full">Đang sử dụng</span>
           </div>
 
           <div class="p-3.5 bg-emerald-50 rounded-xl border border-emerald-200">
             <div class="text-xs text-emerald-900 font-bold mb-1">Gói Fit Pro 30 Suất Cá Nhân Hóa</div>
             <div class="flex justify-between items-baseline mb-2">
-              <span class="text-xs text-stone-500">Số suất còn lại:</span>
-              <span class="text-xl font-black text-emerald-800" id="remainingCredits">18 / 30</span>
+              <span class="text-xs text-stone-500">Suất ăn còn lại:</span>
+              <span class="text-xl font-black text-emerald-800 font-mono" id="remainingCredits">18 / 30</span>
             </div>
             <div class="w-full bg-emerald-200 rounded-full h-2 overflow-hidden">
               <div class="bg-emerald-600 h-2 rounded-full" style="width: 60%"></div>
@@ -273,8 +274,8 @@
           </div>
 
           <div class="text-[11px] text-stone-500 flex items-center justify-between">
-            <span>Hạn dùng gói: 30/12/2026</span>
-            <a href="../4_counter_lounge/package_topup.html" class="text-emerald-700 font-semibold hover:underline">Nạp thêm →</a>
+            <span>Hạn dùng: 30/12/2026</span>
+            <a href="../4_counter_lounge/package_topup.html" class="text-emerald-700 font-semibold hover:underline">Gia hạn thêm →</a>
           </div>
         </div>
 
@@ -282,7 +283,7 @@
         <div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-200 space-y-4">
           <h3 class="text-sm font-bold text-stone-900 border-b border-stone-100 pb-2 flex items-center">
             <i class="fa-solid fa-receipt text-emerald-600 mr-2"></i>
-            Tóm Tắt Đơn Đặt Suất Ăn
+            Tóm Tắt Suất Ăn Đặt Trước
           </h3>
 
           <div class="space-y-2 text-xs">
@@ -291,11 +292,11 @@
               <span class="font-bold text-stone-800">Nguyễn Văn A (MEM-8899)</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-stone-500">Ngày nhận:</span>
-              <span class="font-bold text-stone-800" id="summaryDate">Ngày mai (15/11/2026)</span>
+              <span class="text-stone-500">Ngày phục vụ:</span>
+              <span class="font-bold text-stone-800" id="summaryDate">Ngày mai</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-stone-500">Ca nhận:</span>
+              <span class="text-stone-500">Khung giờ:</span>
               <span class="font-bold text-stone-800" id="summaryShift">17:30 - 18:00</span>
             </div>
             <div class="flex justify-between">
@@ -303,14 +304,15 @@
               <span class="font-bold text-stone-800 text-right max-w-[180px]" id="summaryMeal">Ức gà áp chảo & Cơm gạo lứt</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-stone-500">Trừ vào gói:</span>
+              <span class="text-stone-500">Khấu trừ gói:</span>
               <span class="font-bold text-emerald-700">-1 Suất ăn</span>
             </div>
           </div>
 
-          <!-- Nhắc nhở cảnh báo dị ứng lấy từ profile -->
-          <div class="p-2.5 bg-red-50 border border-red-200 rounded-lg text-[11px] text-red-700">
-            ⚠️ <b>Tự động gửi cảnh báo sang KDS:</b> Dị ứng Đậu phộng & Hải sản có vỏ.
+          <!-- Nhắc nhở cảnh báo an toàn dị ứng -->
+          <div class="p-2.5 bg-red-50 border border-red-200 rounded-lg text-[11px] text-red-700 flex items-center space-x-2">
+            <i class="fa-solid fa-triangle-exclamation text-red-500"></i>
+            <span>Bếp đã lưu hồ sơ: <b>Dị ứng Đậu phộng & Hải sản có vỏ</b>.</span>
           </div>
 
           <!-- NÚT ĐẶT ĐƠN -->
@@ -323,8 +325,8 @@
         <!-- DANH SÁCH SUẤT ĂN ĐÃ ĐẶT GẦN ĐÂY -->
         <div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-200">
           <div class="flex justify-between items-center mb-3">
-            <span class="text-xs font-bold text-stone-800">Suất ăn đã đặt sắp tới</span>
-            <a href="order_qr_status.html" class="text-[11px] text-emerald-700 hover:underline">Xem mã QR →</a>
+            <span class="text-xs font-bold text-stone-800">Suất ăn sắp tới của bạn</span>
+            <a href="order_qr_status.html" class="text-[11px] text-emerald-700 hover:underline">Mã nhận đồ →</a>
           </div>
           <div class="space-y-2 text-xs" id="upcomingOrdersList">
             <!-- Render đơn đã đặt -->
@@ -338,7 +340,7 @@
 
   <script>
     /**
-     * MODULE 2: ĐẶT LỊCH & KIỂM SOÁT CUT-OFF 20H00
+     * MODULE: PREORDER & 20:00 CUT-OFF POLICY
      */
     const PreorderApp = {
       selectedDate: null,
@@ -387,7 +389,6 @@
           const dateStr = d.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' });
           const fullDateKey = d.toISOString().split('T')[0];
 
-          // Nếu là ngày mai (i = 1) và đã qua 20h00 -> disable
           const isDateTomorrow = (i === 1);
           const isDisabled = isDateTomorrow && isLocked;
 
@@ -414,7 +415,7 @@
             <span class="text-[10px] uppercase">${isDateTomorrow ? 'Ngày mai' : dayOfWeek}</span>
             <span class="text-sm font-black my-0.5">${dateStr}</span>
             <span class="text-[9px] ${isDisabled ? 'text-red-400 font-bold' : isSelected ? 'text-emerald-100' : 'text-stone-400'}">
-              ${isDisabled ? 'Đã khóa 20h' : 'Nhận đơn'}
+              ${isDisabled ? 'Đã chốt 20h' : 'Nhận đặt'}
             </span>
           `;
 
@@ -429,7 +430,6 @@
           container.appendChild(btn);
         }
 
-        // Cập nhật cảnh báo nếu ngày mai bị khóa
         const lockAlert = document.getElementById('dateLockAlert');
         if (isLocked) {
           lockAlert.classList.remove('hidden');
@@ -481,15 +481,15 @@
           const statusText = document.getElementById('cutoffStatusText');
 
           if (diff <= 0) {
-            document.getElementById('cutoffCountdown').innerText = "00:00:00 (ĐÃ KHÓA)";
-            statusText.innerHTML = "🔴 <b>Đã hết hạn đặt ngày mai</b> (Chỉ nhận từ ngày kia)";
+            document.getElementById('cutoffCountdown').innerText = "00:00:00 (ĐÃ ĐÓNG)";
+            statusText.innerHTML = "🔴 <b>Đã chốt suất ăn ngày mai</b> (Nhận từ ngày kia)";
             statusText.className = "text-[10px] text-red-300 mt-0.5";
           } else {
             const h = String(Math.floor(diff / 3600000)).padStart(2, '0');
             const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
             const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
             document.getElementById('cutoffCountdown').innerText = `${h}:${m}:${s}`;
-            statusText.innerHTML = "🟢 Đang mở đặt cho ngày mai (Đóng lúc 20:00)";
+            statusText.innerHTML = "🟢 Đang mở đặt món cho ngày mai (Đóng lúc 20:00)";
             statusText.className = "text-[10px] text-emerald-200 mt-0.5";
           }
         };
@@ -522,7 +522,7 @@
           shift: this.selectedShift,
           mealTitle: meal.name,
           takeaway: takeawayText,
-          status: 'QUEUED', // Trạng thái: Chờ chế biến
+          status: 'QUEUED',
           statusText: 'Đã nhận đơn - Chờ vào ca nấu',
           allergens: ['Dị ứng Đậu phộng', 'Dị ứng Hải sản có vỏ'],
           macros: {
@@ -533,12 +533,11 @@
           createdAt: new Date().toISOString()
         };
 
-        // Lưu vào localStorage orders list
         let orders = JSON.parse(localStorage.getItem('fitlab_orders') || '[]');
         orders.unshift(newOrder);
         localStorage.setItem('fitlab_orders', JSON.stringify(orders));
 
-        alert(`✅ ĐẶT SUẤT ĂN THÀNH CÔNG!\n- Mã đơn: ${newOrder.orderId}\n- Ngày: ${newOrder.date}\n- Ca: ${newOrder.shift}\n\nChuyển sang màn hình Lấy Mã QR & Xem Tiến Độ...`);
+        alert(`✅ ĐẶT SUẤT ĂN THÀNH CÔNG!\n- Mã đơn: ${newOrder.orderId}\n- Ngày: ${newOrder.date}\n- Ca: ${newOrder.shift}\n\nĐang mở thẻ nhận món & mã QR của bạn...`);
         window.location.href = 'order_qr_status.html?id=' + newOrder.orderId;
       },
 
@@ -546,7 +545,6 @@
         let orders = JSON.parse(localStorage.getItem('fitlab_orders') || '[]');
         const container = document.getElementById('upcomingOrdersList');
         if (!orders.length) {
-          // Tạo một đơn mẫu có sẵn
           orders = [{
             orderId: 'ORD-1024',
             customerName: 'Nguyễn Văn A',
@@ -567,8 +565,8 @@
               <div class="font-bold text-stone-800">${o.orderId} - ${o.shift}</div>
               <div class="text-[11px] text-stone-500 truncate max-w-[170px]">${o.mealTitle}</div>
             </div>
-            <a href="order_qr_status.html?id=${o.orderId}" class="text-[11px] bg-emerald-100 text-emerald-800 font-bold px-2 py-1 rounded hover:bg-emerald-200 transition">
-              QR code →
+            <a href="order_qr_status.html?id=${o.orderId}" class="text-[11px] bg-emerald-100 text-emerald-800 font-bold px-2.5 py-1 rounded-lg hover:bg-emerald-200 transition">
+              Mã QR →
             </a>
           </div>
         `).join('');
@@ -581,7 +579,6 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      // Check session
       const sessionStr = localStorage.getItem('fitlab_session');
       if (sessionStr) {
         try {
@@ -598,4 +595,3 @@
   </script>
 </body>
 </html>
-
