@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cập nhật InBody & Dị ứng - FitLab Member Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            fitlab: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-stone-100 text-stone-800 font-sans min-h-screen">
+
+  <!-- TOP NAVIGATION BAR -->
+  <nav class="bg-emerald-900 text-white shadow-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <a href="../../index.html" class="text-xs bg-emerald-800 hover:bg-emerald-700 px-3 py-1.5 rounded-lg text-emerald-200 transition">
+          <i class="fa-solid fa-arrow-left mr-1"></i> Trang tổng
+        </a>
+        <div class="flex items-center space-x-2">
+          <span class="text-2xl">🥗</span>
+          <span class="font-bold tracking-tight text-lg">FitLab Member Portal</span>
+        </div>
+      </div>
+
+      <!-- Tab điều hướng trong Portal Hội viên -->
+      <div class="hidden md:flex space-x-1 text-xs">
+        <a href="inbody_allergy.html" class="bg-emerald-800 text-white font-bold px-3 py-2 rounded-lg">
+          <i class="fa-solid fa-weight-scale mr-1.5 text-emerald-300"></i> Chỉ số InBody & Dị ứng
+        </a>
+        <a href="preorder_calendar.html" class="text-emerald-200 hover:bg-emerald-800/60 px-3 py-2 rounded-lg transition">
+          <i class="fa-solid fa-calendar-days mr-1.5"></i> Đặt lịch suất ăn
+        </a>
+        <a href="order_qr_status.html" class="text-emerald-200 hover:bg-emerald-800/60 px-3 py-2 rounded-lg transition">
+          <i class="fa-solid fa-qrcode mr-1.5"></i> QR & Tiến độ suất ăn
+        </a>
+      </div>
+
+      <div class="flex items-center space-x-3 text-xs">
+        <div class="text-right hidden sm:block">
+          <div id="navUserName" class="font-semibold text-white">Hội viên: Nguyễn Văn A</div>
+          <div id="navUserCode" class="text-[11px] text-emerald-300">Mã HV: MEM-8899</div>
+        </div>
+        <button onclick="logout()" class="p-2 bg-emerald-800 hover:bg-emerald-700 text-emerald-200 rounded-lg" title="Đăng xuất">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BODY CONTENT -->
+  <main class="max-w-6xl mx-auto p-4 md:p-6 space-y-6">
+
+    <!-- Header thông tin & Phụ trách -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between bg-white p-5 rounded-2xl shadow-sm border border-stone-200 gap-4">
+      <div>
+        <h1 class="text-xl md:text-2xl font-bold text-stone-900 flex items-center">
+          <i class="fa-solid fa-heart-pulse text-emerald-600 mr-2.5"></i>
+          Hồ Sơ Thể Trạng InBody & Cấu Hình Dinh Dưỡng
+        </h1>
+        <p class="text-xs text-stone-500 mt-1">
+          Quy chuẩn R06 - R09: Dữ liệu InBody là căn cứ số hóa để Bếp tự động cân chia Macro gram chính xác cho từng khay ăn cá nhân.
+        </p>
+      </div>
+      <div class="flex items-center space-x-2 text-xs">
+        <span class="bg-emerald-100 text-emerald-800 font-semibold px-3 py-1 rounded-full border border-emerald-300">
+          Phụ trách InBody: Thu Lan
+        </span>
+        <span class="bg-amber-100 text-amber-800 font-semibold px-3 py-1 rounded-full border border-amber-300">
+          Phụ trách Dị ứng: Hà Linh
+        </span>
+      </div>
+    </div>
+
+    <!-- MAIN FORM GRID -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- CỘT TRÁI (7 CỘT): FORM NHẬP THÔNG SỐ INBODY (Thu Lan phụ trách) -->
+      <section class="lg:col-span-7 bg-white p-6 rounded-2xl shadow-sm border border-stone-200 space-y-6">
+        <div class="border-b border-stone-200 pb-3 flex justify-between items-center">
+          <h2 class="text-base font-bold text-stone-900 flex items-center">
+            <span class="w-7 h-7 bg-emerald-600 text-white rounded-lg flex items-center justify-center text-xs mr-2">1</span>
+            Nhập Kết Quả Đo InBody Mới Nhất
+          </h2>
+          <span class="text-xs text-stone-400" id="lastUpdatedText">Cập nhật: Hôm nay</span>
+        </div>
+
+        <form id="inbodyForm" onsubmit="InBodyManager.save(event)" class="space-y-4">
+          <!-- Thông tin nhân khẩu học cơ bản -->
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-stone-600 mb-1">Giới tính</label>
+              <select id="gender" onchange="InBodyManager.calculate()" class="w-full text-xs p-2.5 bg-stone-50 border border-stone-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
+                <option value="male">Nam</option>
+                <option value="female">Nữ</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-stone-600 mb-1">Tuổi</label>
+              <input type="number" id="age" value="26" min="15" max="80" oninput="InBodyManager.calculate()" class="w-full text-xs p-2.5 bg-stone-50 border border-stone-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-stone-600 mb-1">Chiều cao (cm)</label>
+              <input type="number" id="height" value="175" min="120" max="230" step="0.5" oninput="InBodyManager.calculate()" class="w-full text-xs p-2.5 bg-stone-50 border border-stone-300 rounded-lg focus:ring-2 focus:ring-emerald-500 font-bold text-stone-800">
+            </div>
+          </div>
+
+          <!-- Các chỉ số InBody đo được từ máy -->
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-stone-600 mb-1">Cân nặng (kg)</label>
+              <input type="number" id="weight" value="72.5" min="30" max="200" step="0.1" oninput="InBodyManager.calculate()" class="w-full text-xs p-2.5 bg-stone-50 border border-stone-300 rounded-lg focus:ring-2 focus:ring-emerald-500 font-bold text-stone-800">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-stone-600 mb-1">Tỷ lệ mỡ (% Body Fat)</label>
+              <input type="number" id="bodyFat" value="16.5" min="3" max="60" step="0.1" oninput="InBodyManager.calculate()" class="w-full text-xs p-2.5 bg-stone-50 border border-stone-300 rounded-lg focus:ring-2 focus:ring-emerald-500 font-bold text-stone-800">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-stone-600 mb-1">Khối cơ SMM (kg)</label>
+              <input type="number" id="muscleMass" value="34.8" min="10" max="90" step="0.1" oninput="InBodyManager.calculate()" class="w-full text-xs p-2.5 bg-stone-50 border border-stone-300 rounded-lg focus:ring-2 focus:ring-emerald-500 font-bold text-stone-800">
+            </div>
+          </div>
+
+          <!-- Mục tiêu thể hình & Mức độ vận động PAL -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+            <div>
+              <label class="block text-xs font-semibold text-stone-600 mb-1">🎯 Mục tiêu thể hình</label>
+              <select id="fitnessGoal" onchange="InBodyManager.calculate()" class="w-full text-xs p-2.5 bg-stone-50 border border-stone-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
+                <option value="cut">Giảm mỡ siết cơ (Deficit -20%)</option>
+                <option value="maintain" selected>Giữ cân & Tái tạo vóc dáng (Maintain)</option>
+                <option value="bulk">Tăng cơ nạc (Lean Bulk +10%)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-stone-600 mb-1">🏃 Mức độ vận động (PAL)</label>
+              <select id="palLevel" onchange="InBodyManager.calculate()" class="w-full text-xs p-2.5 bg-stone-50 border border-stone-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
+                <option value="1.2">Ít vận động (Văn phòng, không tập)</option>
+                <option value="1.375">Vận động nhẹ (Tập 1-3 buổi/tuần)</option>
+                <option value="1.55" selected>Vận động vừa (Tập 3-5 buổi/tuần)</option>
+                <option value="1.725">Vận động nặng (Tập 6-7 buổi/tuần)</option>
+                <option value="1.9">Cường độ vận động viên (Tập 2 buổi/ngày)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- KHU VỰC 2: KHAI BÁO DỊ ỨNG & LOẠI TRỪ (Hà Linh phụ trách - Lan tích hợp liên thông) -->
+          <div class="pt-4 border-t border-stone-200">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-xs font-bold text-red-700 flex items-center uppercase tracking-wide">
+                <i class="fa-solid fa-triangle-exclamation mr-1.5 text-red-500"></i>
+                2. Khai báo Dị ứng & Thành phần loại trừ (Allergen Rules)
+              </h3>
+              <span class="text-[11px] text-stone-400">Đồng bộ cảnh báo màn hình KDS</span>
+            </div>
+            <p class="text-[11px] text-stone-500 mb-3">
+              Món ăn tại bếp sẽ tự động loại trừ hoặc thay thế nước sốt khi phát hiện dị ứng tương ứng.
+            </p>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
+              <label class="flex items-center space-x-2 p-2 bg-stone-50 hover:bg-red-50 border border-stone-200 hover:border-red-300 rounded-lg cursor-pointer transition">
+                <input type="checkbox" name="allergen" value="peanut" checked class="text-red-600 rounded focus:ring-red-500">
+                <span>🥜 Đậu phộng / Lạc</span>
+              </label>
+              <label class="flex items-center space-x-2 p-2 bg-stone-50 hover:bg-red-50 border border-stone-200 hover:border-red-300 rounded-lg cursor-pointer transition">
+                <input type="checkbox" name="allergen" value="seafood" checked class="text-red-600 rounded focus:ring-red-500">
+                <span>🦐 Hải sản có vỏ</span>
+              </label>
+              <label class="flex items-center space-x-2 p-2 bg-stone-50 hover:bg-red-50 border border-stone-200 hover:border-red-300 rounded-lg cursor-pointer transition">
+                <input type="checkbox" name="allergen" value="gluten" class="text-red-600 rounded focus:ring-red-500">
+                <span>🌾 Gluten (Lúa mì)</span>
+              </label>
+              <label class="flex items-center space-x-2 p-2 bg-stone-50 hover:bg-red-50 border border-stone-200 hover:border-red-300 rounded-lg cursor-pointer transition">
+                <input type="checkbox" name="allergen" value="dairy" class="text-red-600 rounded focus:ring-red-500">
+                <span>🥛 Sữa (Lactose)</span>
+              </label>
+              <label class="flex items-center space-x-2 p-2 bg-stone-50 hover:bg-red-50 border border-stone-200 hover:border-red-300 rounded-lg cursor-pointer transition">
+                <input type="checkbox" name="allergen" value="egg" class="text-red-600 rounded focus:ring-red-500">
+                <span>🥚 Trứng</span>
+              </label>
+              <label class="flex items-center space-x-2 p-2 bg-stone-50 hover:bg-red-50 border border-stone-200 hover:border-red-300 rounded-lg cursor-pointer transition">
+                <input type="checkbox" name="allergen" value="soy" class="text-red-600 rounded focus:ring-red-500">
+                <span>🌱 Đậu nành</span>
+              </label>
+            </div>
+            
+            <div class="mt-2">
+              <input type="text" id="allergyNotes" placeholder="Ghi chú dị ứng đặc biệt khác (ví may: không ớt, không hành hoa...)" 
+                     class="w-full text-xs p-2 bg-stone-50 border border-stone-200 rounded-lg focus:ring-1 focus:ring-red-400">
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow-md transition flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+              <span>Lưu Cập Nhật InBody & Đồng Bộ Dinh Dưỡng</span>
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- CỘT PHẢI (5 CỘT): KẾT QUẢ TÍNH TOÁN BMR, TDEE & PHÂN BỔ MACRO TỰ ĐỘNG -->
+      <section class="lg:col-span-5 space-y-6">
+
+        <!-- THẺ KẾT QUẢ TDEE & CALORIES -->
+        <div class="bg-gradient-to-br from-emerald-900 to-green-950 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <span class="text-[11px] uppercase tracking-wider text-emerald-300 font-semibold">Chỉ số chuyển hóa</span>
+              <h2 class="text-lg font-bold">Mục Tiêu Năng Lượng / Ngày</h2>
+            </div>
+            <span id="badgeBMI" class="bg-emerald-600 text-white text-xs px-2.5 py-1 rounded-full font-bold">BMI: 23.7 (Chuẩn)</span>
+          </div>
+
+          <div class="flex items-baseline space-x-2 mb-4">
+            <span id="targetCalories" class="text-4xl font-extrabold text-amber-300">2,320</span>
+            <span class="text-sm text-emerald-200 font-semibold">kcal / ngày</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-xs bg-emerald-800/50 p-3 rounded-xl border border-emerald-700/50">
+            <div>
+              <span class="text-emerald-300 block">BMR (Trao đổi cơ bản):</span>
+              <span id="displayBMR" class="font-bold text-white text-sm">1,680 kcal</span>
+            </div>
+            <div>
+              <span class="text-emerald-300 block">TDEE (Tổng tiêu thụ):</span>
+              <span id="displayTDEE" class="font-bold text-white text-sm">2,604 kcal</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- THẺ PHÂN BỔ GRAM MACRO TỰ ĐỘNG (Protein, Carb, Fat) -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 space-y-4">
+          <div class="flex justify-between items-center">
+            <h3 class="text-sm font-bold text-stone-800 flex items-center">
+              <i class="fa-solid fa-chart-pie text-emerald-600 mr-2"></i>
+              Phân Bổ Định Lượng Macro Mục Tiêu
+            </h3>
+            <span class="text-[11px] text-stone-400">Đơn vị: Gram</span>
+          </div>
+
+          <div class="space-y-3 text-xs">
+            <!-- ĐẠM (PROTEIN) -->
+            <div class="bg-stone-50 p-3 rounded-xl border border-stone-200">
+              <div class="flex justify-between items-center mb-1">
+                <span class="font-bold text-blue-700 flex items-center">
+                  <span class="w-2.5 h-2.5 rounded-full bg-blue-600 mr-1.5"></span> Đạm (Protein)
+                </span>
+                <span id="gramProtein" class="font-black text-sm text-stone-800">165 g</span>
+              </div>
+              <div class="w-full bg-stone-200 rounded-full h-1.5 overflow-hidden">
+                <div class="bg-blue-600 h-1.5 rounded-full" style="width: 30%"></div>
+              </div>
+              <div class="flex justify-between text-[10px] text-stone-400 mt-1">
+                <span>30% Calo (~660 kcal)</span>
+                <span>2.2g / kg trọng lượng</span>
+              </div>
+            </div>
+
+            <!-- TINH BỘT (CARBS) -->
+            <div class="bg-stone-50 p-3 rounded-xl border border-stone-200">
+              <div class="flex justify-between items-center mb-1">
+                <span class="font-bold text-amber-700 flex items-center">
+                  <span class="w-2.5 h-2.5 rounded-full bg-amber-500 mr-1.5"></span> Tinh bột (Carbohydrate)
+                </span>
+                <span id="gramCarbs" class="font-black text-sm text-stone-800">232 g</span>
+              </div>
+              <div class="w-full bg-stone-200 rounded-full h-1.5 overflow-hidden">
+                <div class="bg-amber-500 h-1.5 rounded-full" style="width: 40%"></div>
+              </div>
+              <div class="flex justify-between text-[10px] text-stone-400 mt-1">
+                <span>40% Calo (Ưu tiên gạo lứt, yến mạch)</span>
+                <span>4.0 kcal / g</span>
+              </div>
+            </div>
+
+            <!-- CHẤT BÉO (FAT) -->
+            <div class="bg-stone-50 p-3 rounded-xl border border-stone-200">
+              <div class="flex justify-between items-center mb-1">
+                <span class="font-bold text-rose-700 flex items-center">
+                  <span class="w-2.5 h-2.5 rounded-full bg-rose-500 mr-1.5"></span> Chất béo tốt (Lipid / Fat)
+                </span>
+                <span id="gramFat" class="font-black text-sm text-stone-800">77 g</span>
+              </div>
+              <div class="w-full bg-stone-200 rounded-full h-1.5 overflow-hidden">
+                <div class="bg-rose-500 h-1.5 rounded-full" style="width: 30%"></div>
+              </div>
+              <div class="flex justify-between text-[10px] text-stone-400 mt-1">
+                <span>30% Calo (Dầu olive, bơ, hạt)</span>
+                <span>9.0 kcal / g</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-[11px] text-emerald-900 leading-relaxed">
+            💡 <b>Quy chế tự động FitLab:</b> Định lượng gram này được chia đều cho số suất ăn bạn đặt trước tại lịch để Bếp chuẩn bị nguyên liệu tươi theo từng mẻ.
+          </div>
+        </div>
+
+        <!-- LỊCH SỬ CÁC LẦN ĐO INBODY -->
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-200">
+          <h3 class="text-xs font-bold text-stone-800 mb-3 flex items-center justify-between">
+            <span><i class="fa-solid fa-clock-rotate-left text-stone-400 mr-1.5"></i>Lịch sử theo dõi InBody</span>
+            <span class="text-[10px] text-emerald-700 font-medium">3 lần gần nhất</span>
+          </h3>
+          <div class="space-y-2 text-xs" id="inbodyHistoryList">
+            <!-- Render lịch sử -->
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-6 right-6 bg-emerald-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center space-x-3 text-sm transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+    <i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+    <span id="toastText">Đã lưu hồ sơ InBody thành công!</span>
+  </div>
+
+  <script>
+    /**
+     * MODULE 2: INBODY & MACRO CALCULATOR
+     * Phụ trách InBody: Thu Lan
+     */
+    const InBodyManager = {
+      state: {
+        weight: 72.5,
+        height: 175,
+        age: 26,
+        gender: 'male',
+        bodyFat: 16.5,
+        muscleMass: 34.8,
+        fitnessGoal: 'maintain',
+        pal: 1.55,
+        allergens: ['peanut', 'seafood'],
+        history: [
+          { date: '10/11/2026', weight: 73.0, bodyFat: 17.0, muscle: 34.5 },
+          { date: '25/10/2026', weight: 73.8, bodyFat: 17.5, muscle: 34.2 },
+          { date: '10/10/2026', weight: 74.5, bodyFat: 18.2, muscle: 33.9 }
+        ]
+      },
+
+      init() {
+        this.loadSavedData();
+        this.calculate();
+        this.renderHistory();
+      },
+
+      loadSavedData() {
+        const saved = localStorage.getItem('fitlab_inbody_profile');
+        if (saved) {
+          try {
+            const data = JSON.parse(saved);
+            this.state = { ...this.state, ...data };
+            
+            // Fill form inputs
+            document.getElementById('weight').value = this.state.weight;
+            document.getElementById('height').value = this.state.height;
+            document.getElementById('age').value = this.state.age;
+            document.getElementById('gender').value = this.state.gender;
+            document.getElementById('bodyFat').value = this.state.bodyFat;
+            document.getElementById('muscleMass').value = this.state.muscleMass;
+            document.getElementById('fitnessGoal').value = this.state.fitnessGoal;
+            document.getElementById('palLevel').value = this.state.pal;
+            
+            // Checkboxes
+            document.querySelectorAll('input[name="allergen"]').forEach(cb => {
+              cb.checked = this.state.allergens.includes(cb.value);
+            });
+          } catch(e) {
+            console.error(e);
+          }
+        }
+      },
+
+      calculate() {
+        const weight = parseFloat(document.getElementById('weight').value) || 70;
+        const height = parseFloat(document.getElementById('height').value) || 170;
+        const age = parseInt(document.getElementById('age').value) || 25;
+        const gender = document.getElementById('gender').value;
+        const bodyFat = parseFloat(document.getElementById('bodyFat').value) || 15;
+        const goal = document.getElementById('fitnessGoal').value;
+        const pal = parseFloat(document.getElementById('palLevel').value) || 1.55;
+
+        // 1. BMI Calculation
+        const heightM = height / 100;
+        const bmi = (weight / (heightM * heightM)).toFixed(1);
+        let bmiLabel = 'Bình thường';
+        if (bmi < 18.5) bmiLabel = 'Gầy';
+        else if (bmi >= 25 && bmi < 30) bmiLabel = 'Hơi thừa cân';
+        else if (bmi >= 30) bmiLabel = 'Béo phì';
+
+        document.getElementById('badgeBMI').innerText = `BMI: ${bmi} (${bmiLabel})`;
+
+        // 2. BMR Calculation (Mifflin-St Jeor)
+        let bmr = 0;
+        if (gender === 'male') {
+          bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5;
+        } else {
+          bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161;
+        }
+
+        // TDEE = BMR * PAL
+        const tdee = Math.round(bmr * pal);
+
+        // Target Calories based on Goal
+        let targetCal = tdee;
+        if (goal === 'cut') {
+          targetCal = Math.round(tdee * 0.8); // Deficit 20%
+        } else if (goal === 'bulk') {
+          targetCal = Math.round(tdee * 1.1); // Surplus 10%
+        }
+
+        // 3. Macro Split
+        // Protein: 2.2g per kg (weight) -> 1g = 4 kcal
+        const proteinGram = Math.round(weight * 2.2);
+        const proteinCal = proteinGram * 4;
+
+        // Fat: 25% of Target Calories -> 1g = 9 kcal
+        const fatCal = targetCal * 0.25;
+        const fatGram = Math.round(fatCal / 9);
+
+        // Carbs: Remainder calories -> 1g = 4 kcal
+        const carbCal = Math.max(0, targetCal - proteinCal - fatCal);
+        const carbGram = Math.round(carbCal / 4);
+
+        // Update UI
+        document.getElementById('displayBMR').innerText = `${Math.round(bmr).toLocaleString()} kcal`;
+        document.getElementById('displayTDEE').innerText = `${tdee.toLocaleString()} kcal`;
+        document.getElementById('targetCalories').innerText = targetCal.toLocaleString();
+
+        document.getElementById('gramProtein').innerText = `${proteinGram} g`;
+        document.getElementById('gramCarbs').innerText = `${carbGram} g`;
+        document.getElementById('gramFat').innerText = `${fatGram} g`;
+      },
+
+      save(e) {
+        e.preventDefault();
+        const allergens = Array.from(document.querySelectorAll('input[name="allergen"]:checked')).map(cb => cb.value);
+        
+        const profileData = {
+          weight: parseFloat(document.getElementById('weight').value),
+          height: parseFloat(document.getElementById('height').value),
+          age: parseInt(document.getElementById('age').value),
+          gender: document.getElementById('gender').value,
+          bodyFat: parseFloat(document.getElementById('bodyFat').value),
+          muscleMass: parseFloat(document.getElementById('muscleMass').value),
+          fitnessGoal: document.getElementById('fitnessGoal').value,
+          pal: parseFloat(document.getElementById('palLevel').value),
+          allergens: allergens,
+          allergyNotes: document.getElementById('allergyNotes').value,
+          updatedAt: new Date().toLocaleDateString('vi-VN')
+        };
+
+        // Add to history
+        this.state.history.unshift({
+          date: profileData.updatedAt,
+          weight: profileData.weight,
+          bodyFat: profileData.bodyFat,
+          muscle: profileData.muscleMass
+        });
+        if (this.state.history.length > 5) this.state.history.pop();
+        profileData.history = this.state.history;
+
+        // Save
+        localStorage.setItem('fitlab_inbody_profile', JSON.stringify(profileData));
+        this.renderHistory();
+        this.showToast('✅ Đã cập nhật chỉ số InBody & đồng bộ hệ thống dinh dưỡng!');
+      },
+
+      renderHistory() {
+        const container = document.getElementById('inbodyHistoryList');
+        if (!container) return;
+
+        container.innerHTML = this.state.history.map(item => `
+          <div class="flex justify-between items-center p-2.5 bg-stone-50 rounded-xl border border-stone-200">
+            <div>
+              <span class="font-bold text-stone-800">${item.date}</span>
+              <span class="ml-2 text-stone-500">Cân nặng: <b>${item.weight} kg</b></span>
+            </div>
+            <div class="text-[11px] text-stone-600 space-x-2">
+              <span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded">Mỡ: ${item.bodyFat}%</span>
+              <span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded">Cơ: ${item.muscle} kg</span>
+            </div>
+          </div>
+        `).join('');
+      },
+
+      showToast(msg) {
+        const toast = document.getElementById('toast');
+        document.getElementById('toastText').innerText = msg;
+        toast.classList.remove('translate-y-20', 'opacity-0');
+        setTimeout(() => {
+          toast.classList.add('translate-y-20', 'opacity-0');
+        }, 3500);
+      }
+    };
+
+    function logout() {
+      localStorage.removeItem('fitlab_session');
+      window.location.href = '../1_auth/login.html';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check user session
+      const sessionStr = localStorage.getItem('fitlab_session');
+      if (sessionStr) {
+        try {
+          const session = JSON.parse(sessionStr);
+          document.getElementById('navUserName').innerText = `Hội viên: ${session.user.name}`;
+          if (session.user.memberCode) {
+            document.getElementById('navUserCode').innerText = `Mã HV: ${session.user.memberCode}`;
+          }
+        } catch(e) {}
+      }
+
+      InBodyManager.init();
+    });
+  </script>
+</body>
+</html>
