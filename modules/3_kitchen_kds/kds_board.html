@@ -13,7 +13,7 @@
       <div class="flex items-center space-x-3">
         <a href="../../index.html" class="text-amber-400 text-sm hover:underline">← Quay lại Trang điều hướng tổng</a>
         <span class="text-xs bg-slate-800 text-slate-400 px-2 py-0.5 rounded border border-slate-700">
-          KDS UI: P.Anh | Logic 1-chạm: Thu Lan
+          KDS Kitchen Display System
         </span>
       </div>
       <h1 class="text-2xl font-bold mt-1">👨‍🍳 MÀN HÌNH ĐIỀU PHỐI CHẾ BIẾN BẾP (KDS) - MỤC 2.1.5</h1>
@@ -56,7 +56,7 @@
         </table>
       </div>
 
-      <!-- NÚT BẤM HĐ 4 (Thu Lan gắn logic bắt đầu ca nấu) -->
+      <!-- NÚT BẤM HĐ 4: BẮT ĐẦU CA NẤU -->
       <div>
         <button id="btnStartBatch" onclick="KDSManager.startBatchCooking()" 
                 class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-3.5 rounded-lg shadow-lg flex items-center justify-center space-x-2 transition text-base">
@@ -95,7 +95,6 @@
   <script>
     /**
      * MODULE 3: KITCHEN DISPLAY SYSTEM (KDS) LOGIC
-     * Phụ trách logic 1-chạm & đồng bộ trạng thái: Thu Lan
      */
     const KDSManager = {
       orders: [],
@@ -261,7 +260,7 @@
               <div>🥦 Bông cải xanh: <b class="text-sm text-amber-300 font-mono">${veggieWeight}</b></div>
             </div>
 
-            <!-- NÚT 1-CHẠM HĐ 7 (Do Thu Lan code logic) -->
+            <!-- NÚT 1-CHẠM HĐ 7: HOÀN TẤT ĐÓNG KHAY -->
             ${
               isReady 
                 ? `
