@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mã QR & Tiến Độ Suất Ăn - FitLab Member</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Thư viện sinh QR Code gọn nhẹ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            fitlab: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-stone-100 text-stone-800 font-sans min-h-screen">
+
+  <!-- TOP NAVIGATION BAR -->
+  <nav class="bg-emerald-900 text-white shadow-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <a href="../../index.html" class="text-xs bg-emerald-800 hover:bg-emerald-700 px-3 py-1.5 rounded-lg text-emerald-200 transition">
+          <i class="fa-solid fa-arrow-left mr-1"></i> Trang tổng
+        </a>
+        <div class="flex items-center space-x-2">
+          <span class="text-2xl">🥗</span>
+          <span class="font-bold tracking-tight text-lg">FitLab Member Portal</span>
+        </div>
+      </div>
+
+      <!-- Tab điều hướng -->
+      <div class="hidden md:flex space-x-1 text-xs">
+        <a href="inbody_allergy.html" class="text-emerald-200 hover:bg-emerald-800/60 px-3 py-2 rounded-lg transition">
+          <i class="fa-solid fa-weight-scale mr-1.5"></i> Chỉ số InBody & Dị ứng
+        </a>
+        <a href="preorder_calendar.html" class="text-emerald-200 hover:bg-emerald-800/60 px-3 py-2 rounded-lg transition">
+          <i class="fa-solid fa-calendar-days mr-1.5"></i> Đặt lịch suất ăn
+        </a>
+        <a href="order_qr_status.html" class="bg-emerald-800 text-white font-bold px-3 py-2 rounded-lg">
+          <i class="fa-solid fa-qrcode mr-1.5 text-emerald-300"></i> QR & Tiến độ suất ăn
+        </a>
+      </div>
+
+      <div class="flex items-center space-x-3 text-xs">
+        <div class="text-right hidden sm:block">
+          <div id="navUserName" class="font-semibold text-white">Hội viên: Nguyễn Văn A</div>
+          <div class="text-[11px] text-emerald-300">Mã HV: MEM-8899</div>
+        </div>
+        <button onclick="logout()" class="p-2 bg-emerald-800 hover:bg-emerald-700 text-emerald-200 rounded-lg">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BODY CONTENT -->
+  <main class="max-w-4xl mx-auto p-4 md:p-6 space-y-6">
+
+    <!-- HEADER TITLE & PHỤ TRÁCH -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between bg-white p-5 rounded-2xl shadow-sm border border-stone-200 gap-3">
+      <div>
+        <h1 class="text-xl md:text-2xl font-bold text-stone-900 flex items-center">
+          <i class="fa-solid fa-qrcode text-emerald-600 mr-2.5"></i>
+          Mã QR Nhận Suất Ăn & Tiến Độ Chế Biến Realtime
+        </h1>
+        <p class="text-xs text-stone-500 mt-1">
+          Xuất trình mã QR này tại Quầy FitLab Lounge hoặc cho Lễ tân quét để nhận khay thức ăn nóng hổi.
+        </p>
+      </div>
+      <span class="self-start sm:self-auto bg-emerald-100 text-emerald-800 text-xs font-semibold px-3 py-1 rounded-full border border-emerald-300">
+        Phụ trách: Thu Lan & P.Anh
+      </span>
+    </div>
+
+    <!-- KHỐI CHÍNH: QR CODE & THẺ TIẾN ĐỘ -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+
+      <!-- CỘT TRÁI (5 CỘT): MÃ QR ĐỘNG NHẬN ĐỒ & MÃ PIN DỰ PHÒNG -->
+      <div class="md:col-span-5 bg-white p-6 rounded-2xl shadow-sm border border-stone-200 flex flex-col items-center text-center justify-between space-y-4">
+        <div class="w-full">
+          <div class="flex justify-between items-center w-full mb-3 pb-2 border-b border-stone-100">
+            <span class="text-xs font-bold text-emerald-800" id="displayOrderId">#ORD-1024</span>
+            <span id="qrStatusBadge" class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-full">
+              Đang chế biến
+            </span>
+          </div>
+
+          <!-- KHUNG CHỨA QR CODE -->
+          <div class="p-4 bg-stone-50 rounded-2xl border-2 border-dashed border-emerald-500 inline-block my-2 shadow-inner">
+            <div id="qrcodeCanvas" class="flex justify-center items-center w-48 h-48 bg-white p-2 rounded-xl"></div>
+          </div>
+          
+          <div class="mt-2 text-xs text-stone-500">
+            Quét mã tại mắt đọc Quầy FitLab Lounge
+          </div>
+        </div>
+
+        <!-- MÃ PIN NHẬN ĐỒ DỰ PHÒNG (NẾU CAMERA HỎNG) -->
+        <div class="w-full bg-stone-50 p-3 rounded-xl border border-stone-200">
+          <div class="text-[10px] text-stone-400 uppercase font-semibold">Mã PIN dự phòng (Đọc cho Lễ tân)</div>
+          <div class="text-2xl font-black tracking-widest text-stone-800 font-mono mt-0.5" id="backupPinCode">
+            8 8 9 9
+          </div>
+        </div>
+
+        <!-- THAO TÁC LIÊN THÔNG THỬ NGHIỆM -->
+        <div class="w-full pt-2 border-t border-stone-100">
+          <a href="../3_kitchen_kds/kds_board.html" target="_blank" class="block w-full bg-slate-900 hover:bg-slate-800 text-amber-300 font-bold py-2 px-3 rounded-xl text-xs transition shadow">
+            👨‍🍳 Mở màn hình KDS Bếp (Bấm nút 1-chạm để test đồng bộ) ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- CỘT PHẢI (7 CỘT): TIẾN ĐỘ THỜI GIAN THỰC & CHI TIẾT SUẤT ĂN -->
+      <div class="md:col-span-7 space-y-6">
+
+        <!-- TIẾN ĐỘ THỜI GIAN THỰC (STEPPER) -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 space-y-4">
+          <div class="flex justify-between items-center">
+            <h2 class="text-sm font-bold text-stone-900 flex items-center">
+              <i class="fa-solid fa-bars-progress text-emerald-600 mr-2"></i>
+              Tiến Độ Chế Biến Suất Ăn
+            </h2>
+            <span class="text-[11px] text-stone-400 flex items-center">
+              <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse mr-1.5"></span>
+              Realtime Polling (2s)
+            </span>
+          </div>
+
+          <!-- BƯỚC TIẾN TRÌNH -->
+          <div class="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-stone-200" id="timelineContainer">
+            
+            <!-- Step 1: Đã xác nhận đơn -->
+            <div class="relative flex items-start timeline-step" id="step-ordered">
+              <div class="absolute -left-6 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shadow">
+                ✓
+              </div>
+              <div class="ml-2">
+                <h3 class="text-xs font-bold text-stone-800">1. Đã chốt đơn trước 20h00</h3>
+                <p class="text-[11px] text-stone-500">Đơn hàng được ghi nhận và phân bổ vào kế hoạch nguyên liệu của Bếp.</p>
+              </div>
+            </div>
+
+            <!-- Step 2: Bếp đang chế biến -->
+            <div class="relative flex items-start timeline-step" id="step-cooking">
+              <div class="absolute -left-6 w-5 h-5 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center text-[10px] font-bold shadow animate-pulse">
+                🔥
+              </div>
+              <div class="ml-2">
+                <h3 class="text-xs font-bold text-amber-700">2. Bếp đang chế biến (Ca 17:30 - 18:00)</h3>
+                <p class="text-[11px] text-stone-500">Bếp trưởng đã bấm <b>[Bắt đầu ca nấu]</b>. Suất ăn đang được cân chia chính xác theo gram InBody.</p>
+              </div>
+            </div>
+
+            <!-- Step 3: Đã ra quầy Lounge -->
+            <div class="relative flex items-start timeline-step opacity-40" id="step-ready">
+              <div class="absolute -left-6 w-5 h-5 rounded-full bg-stone-300 text-stone-600 flex items-center justify-center text-[10px] font-bold">
+                🍽️
+              </div>
+              <div class="ml-2">
+                <h3 class="text-xs font-bold text-stone-800">3. Đã sẵn sàng tại Quầy FitLab Lounge</h3>
+                <p class="text-[11px] text-stone-500">Bếp đã đóng khay & bấm nút 1-chạm <b>[Ra quầy]</b>. Suất ăn đang giữ nóng tại quầy tiếp đón.</p>
+              </div>
+            </div>
+
+            <!-- Step 4: Hoàn tất nhận đồ -->
+            <div class="relative flex items-start timeline-step opacity-40" id="step-completed">
+              <div class="absolute -left-6 w-5 h-5 rounded-full bg-stone-300 text-stone-600 flex items-center justify-center text-[10px] font-bold">
+                ⭐
+              </div>
+              <div class="ml-2">
+                <h3 class="text-xs font-bold text-stone-800">4. Đã nhận món & Thưởng thức</h3>
+                <p class="text-[11px] text-stone-500">Hoàn tất thủ tục quét mã tại quầy lễ tân.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Thông báo nổi bật khi món đã sẵn sàng -->
+          <div id="readyAlertBanner" class="hidden p-3.5 bg-green-600 text-white rounded-xl shadow-md text-xs flex items-center space-x-3 animate-bounce">
+            <span class="text-xl">🔔</span>
+            <div>
+              <div class="font-bold">MÓN ĂN ĐÃ RA QUẦY FITLAB LOUNGE!</div>
+              <div class="text-green-100 text-[11px]">Vui lòng đến quầy số 1 và đưa mã QR cho Lễ tân nhận đồ.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHI TIẾT ĐỊNH LƯỢNG SUẤT ĂN -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 space-y-3">
+          <h2 class="text-sm font-bold text-stone-900 border-b border-stone-100 pb-2 flex items-center">
+            <i class="fa-solid fa-utensils text-emerald-600 mr-2"></i>
+            Thông Tin Suất Ăn & Định Lượng Gram
+          </h2>
+
+          <div class="space-y-2 text-xs">
+            <div class="flex justify-between py-1 border-b border-stone-50">
+              <span class="text-stone-500">Món chính:</span>
+              <span class="font-bold text-stone-800" id="detailMealTitle">Ức gà áp chảo thảo mộc & Cơm gạo lứt</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-stone-50">
+              <span class="text-stone-500">Ca nhận suất ăn:</span>
+              <span class="font-bold text-emerald-700" id="detailShift">17:30 - 18:00 (Hôm nay)</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-stone-50">
+              <span class="text-stone-500">Hình thức:</span>
+              <span class="font-bold text-stone-800" id="detailTakeaway">Mang về (Hộp giữ nhiệt)</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-stone-50">
+              <span class="text-stone-500">Định lượng Bếp cân:</span>
+              <span class="font-bold text-stone-800" id="detailMacros">Ức gà 165g, Cơm lứt 180g, Bông cải 120g</span>
+            </div>
+          </div>
+
+          <!-- Nhãn cảnh báo dị ứng đỏ -->
+          <div class="p-2.5 bg-red-950 border border-red-600 text-red-200 rounded-lg text-[11px] font-bold flex items-center space-x-2">
+            <span>⚠️</span>
+            <span>CẢNH BÁO BẾP: HỘI VIÊN DỊ ỨNG ĐẬU PHỘNG & HẢI SẢN CÓ VỎ</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    /**
+     * MODULE 2: MÃ NHẬN SUẤT ĂN & TIẾN ĐỘ REALTIME
+     * Phụ trách: Thu Lan & P.Anh
+     */
+    const QRStatusApp = {
+      order: null,
+      qrcodeObj: null,
+
+      init() {
+        this.loadOrderData();
+        this.renderQRCode();
+        this.startPolling();
+      },
+
+      loadOrderData() {
+        // Lấy ID từ URL nếu có: ?id=ORD-xxxx
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderIdParam = urlParams.get('id');
+
+        let orders = JSON.parse(localStorage.getItem('fitlab_orders') || '[]');
+
+        if (orderIdParam) {
+          this.order = orders.find(o => o.orderId === orderIdParam);
+        }
+
+        if (!this.order) {
+          if (orders.length > 0) {
+            this.order = orders[0];
+          } else {
+            // Đơn mặc định
+            this.order = {
+              orderId: 'ORD-1024',
+              customerName: 'Nguyễn Văn A',
+              memberCode: 'MEM-8899',
+              date: 'Hôm nay',
+              shift: '17:30 - 18:00',
+              mealTitle: 'Ức gà áp chảo thảo mộc & Cơm gạo lứt',
+              takeaway: 'Mang về (Hộp giữ nhiệt)',
+              status: 'COOKING',
+              macros: { chicken: '165g', rice: '180g', veggie: '120g' }
+            };
+            orders.push(this.order);
+            localStorage.setItem('fitlab_orders', JSON.stringify(orders));
+          }
+        }
+
+        this.updateUI();
+      },
+
+      renderQRCode() {
+        const qrContainer = document.getElementById('qrcodeCanvas');
+        qrContainer.innerHTML = '';
+
+        const payload = JSON.stringify({
+          orderId: this.order.orderId,
+          memberCode: this.order.memberCode,
+          name: this.order.customerName,
+          shift: this.order.shift,
+          ts: Date.now()
+        });
+
+        this.qrcodeObj = new QRCode(qrContainer, {
+          text: payload,
+          width: 170,
+          height: 170,
+          colorDark: "#14532d",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.H
+        });
+      },
+
+      updateUI() {
+        if (!this.order) return;
+
+        document.getElementById('displayOrderId').innerText = '#' + this.order.orderId;
+        document.getElementById('detailMealTitle').innerText = this.order.mealTitle;
+        document.getElementById('detailShift').innerText = `${this.order.shift} (${this.order.date || 'Hôm nay'})`;
+        document.getElementById('detailTakeaway').innerText = this.order.takeaway || 'Dùng tại FitLab Lounge';
+        
+        // Cập nhật trạng thái và timeline
+        const status = this.order.status || 'COOKING';
+        const badge = document.getElementById('qrStatusBadge');
+        const alertBanner = document.getElementById('readyAlertBanner');
+
+        const stepOrdered = document.getElementById('step-ordered');
+        const stepCooking = document.getElementById('step-cooking');
+        const stepReady = document.getElementById('step-ready');
+        const stepCompleted = document.getElementById('step-completed');
+
+        // Reset
+        [stepOrdered, stepCooking, stepReady, stepCompleted].forEach(s => s.className = 'relative flex items-start timeline-step opacity-40');
+
+        if (status === 'QUEUED') {
+          badge.innerText = 'Chờ chế biến';
+          badge.className = 'bg-stone-200 text-stone-800 text-[10px] font-bold px-2 py-0.5 rounded-full';
+          stepOrdered.className = 'relative flex items-start timeline-step opacity-100';
+          alertBanner.classList.add('hidden');
+        } else if (status === 'COOKING') {
+          badge.innerText = 'Đang chế biến tại bếp';
+          badge.className = 'bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-full';
+          stepOrdered.className = 'relative flex items-start timeline-step opacity-100';
+          stepCooking.className = 'relative flex items-start timeline-step opacity-100';
+          alertBanner.classList.add('hidden');
+        } else if (status === 'READY') {
+          badge.innerText = 'Đã ra quầy Lounge (Sẵn sàng)';
+          badge.className = 'bg-green-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow';
+          stepOrdered.className = 'relative flex items-start timeline-step opacity-100';
+          stepCooking.className = 'relative flex items-start timeline-step opacity-100';
+          stepReady.className = 'relative flex items-start timeline-step opacity-100 font-bold';
+          stepReady.querySelector('.rounded-full').className = 'absolute -left-6 w-5 h-5 rounded-full bg-green-600 text-white flex items-center justify-center text-[10px] font-bold shadow animate-bounce';
+          alertBanner.classList.remove('hidden');
+        } else if (status === 'COMPLETED') {
+          badge.innerText = 'Đã nhận suất ăn';
+          badge.className = 'bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full';
+          [stepOrdered, stepCooking, stepReady, stepCompleted].forEach(s => s.className = 'relative flex items-start timeline-step opacity-100');
+          alertBanner.classList.add('hidden');
+        }
+      },
+
+      startPolling() {
+        // Tự động đọc localStorage mỗi 2 giây để nhận tín hiệu khi Bếp bấm nút 1-chạm
+        setInterval(() => {
+          const orders = JSON.parse(localStorage.getItem('fitlab_orders') || '[]');
+          const current = orders.find(o => o.orderId === this.order.orderId);
+          if (current && current.status !== this.order.status) {
+            this.order.status = current.status;
+            this.updateUI();
+            
+            if (this.order.status === 'READY') {
+              // Phát âm thanh báo hiệu món sẵn sàng
+              this.playDingSound();
+            }
+          }
+        }, 2000);
+      },
+
+      playDingSound() {
+        try {
+          const ctx = new (window.AudioContext || window.webkitAudioContext)();
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+          osc.frequency.setValueAtTime(880, ctx.currentTime + 0.15); // A5
+          gain.gain.setValueAtTime(0.3, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.8);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.8);
+        } catch(e) {}
+      }
+    };
+
+    function logout() {
+      localStorage.removeItem('fitlab_session');
+      window.location.href = '../1_auth/login.html';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check session
+      const sessionStr = localStorage.getItem('fitlab_session');
+      if (sessionStr) {
+        try {
+          const session = JSON.parse(sessionStr);
+          document.getElementById('navUserName').innerText = `Hội viên: ${session.user.name}`;
+        } catch(e) {}
+      }
+
+      QRStatusApp.init();
+    });
+  </script>
+</body>
+</html>
